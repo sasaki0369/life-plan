@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F6FA">
+<title>人生設計図</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --paper:#F3F6FA; --grid:rgba(46,111,216,.075); --ink:#1E3350; --sub:#5B6B82; --line:#CBD7E6;
+  --card:#FFFFFF; --accent:#2E6FD8; --accent-soft:#E3ECFA; --gold:#C98A17; --gold-soft:#FBF0D9;
+  --green:#2F8F66; --red:#C94A3D; --red-soft:#FBE7E4; --shadow:0 1px 0 rgba(30,51,80,.06);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1A2B; --grid:rgba(120,170,240,.08); --ink:#E4ECF7; --sub:#93A4BC; --line:#2A3C57;
+    --card:#16243A; --accent:#6FA3F2; --accent-soft:#1D3354; --gold:#E9B24E; --gold-soft:#3A2F17;
+    --green:#5CC08E; --red:#EE7B6D; --red-soft:#43221F; --shadow:none; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1A2B; --grid:rgba(120,170,240,.08); --ink:#E4ECF7; --sub:#93A4BC; --line:#2A3C57;
+  --card:#16243A; --accent:#6FA3F2; --accent-soft:#1D3354; --gold:#E9B24E; --gold-soft:#3A2F17;
+  --green:#5CC08E; --red:#EE7B6D; --red-soft:#43221F; --shadow:none; color-scheme:dark;
+}
+html{background:var(--paper);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;
+  font-size:16px;line-height:1.7;-webkit-text-size-adjust:100%;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.wrap{max-width:720px;margin:0 auto;padding:20px 16px 120px}
+h1{font-size:1.75rem;font-weight:900;letter-spacing:.02em;line-height:1.3;margin:8px 0 4px}
+h2{font-size:1.05rem;font-weight:700;margin:32px 0 10px;display:flex;align-items:center;gap:10px}
+h2::after{content:"";flex:1;border-top:1.5px dashed var(--line)}
+h3{font-size:1.05rem;margin:0;line-height:1.45}
+p{margin:0}
+.lead{color:var(--sub)}
+.muted{color:var(--sub);font-size:.9rem}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.btn{border:0;background:var(--accent);color:#fff;border-radius:999px;padding:10px 18px;font-weight:700;min-height:44px}
+:root[data-theme="dark"] .btn{color:#0F1A2B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#0F1A2B}}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn.small{padding:6px 14px;min-height:36px;font-size:.9rem}
+.btn.danger{background:transparent;color:var(--red);border:1.5px solid var(--red)}
+.link{background:none;border:0;color:var(--accent);text-decoration:underline;padding:8px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* ---- ruler (hero) ---- */
+.ruler-box{margin:18px -6px 4px;overflow-x:auto}
+.ruler{display:block;width:100%;min-width:320px;height:auto}
+.ruler .tk{stroke:var(--sub);stroke-width:1.5}
+.ruler .tk.big{stroke:var(--ink);stroke-width:2.5}
+.ruler .tl{fill:var(--sub);font-size:26px;text-anchor:middle;font-weight:500}
+.ruler .ax-past{stroke:var(--accent);stroke-width:8;stroke-linecap:round}
+.ruler .ax-fut{stroke:var(--accent);stroke-width:4;stroke-dasharray:10 8;opacity:.55}
+.ruler .ret{stroke:var(--sub);stroke-width:2;stroke-dasharray:4 5}
+.ruler .retl{fill:var(--sub);font-size:22px}
+.ruler .now line{stroke:var(--accent);stroke-width:2.5}
+.ruler .now rect{fill:var(--accent)}
+.ruler .now text{fill:var(--paper);font-size:26px;font-weight:700;text-anchor:middle}
+.ruler .gm{fill:var(--gold);stroke:var(--gold);stroke-width:3}
+.ruler .gm.open{fill:var(--card)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.8rem;color:var(--sub);margin:0 0 4px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.legend i.dia{border-radius:1px;transform:rotate(45deg);background:var(--gold)}
+
+.facts{padding:0}
+.fact{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 16px;border-top:1px solid var(--line)}
+.fact:first-child{border-top:0}
+.fact .k{color:var(--sub);font-size:.9rem;flex-shrink:0}
+.fact .v{text-align:right;font-weight:700}
+.fact .v small{display:block;font-weight:400;color:var(--sub);font-size:.8rem}
+.warn{color:var(--red)}
+.progress{height:8px;background:var(--accent-soft);border-radius:99px;overflow:hidden;margin-top:6px;min-width:120px}
+.progress>div{height:100%;background:var(--gold);border-radius:99px}
+
+.soon{list-style:none;margin:0;padding:0}
+.soon li{display:grid;grid-template-columns:64px 1fr;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line);align-items:center}
+.soon .yrs{font-weight:900;color:var(--accent);font-size:.95rem}
+.soon .yrs small{display:block;font-weight:400;color:var(--sub);font-size:.75rem}
+
+/* ---- timeline ---- */
+.switch{display:inline-flex;align-items:center;gap:8px;font-size:.9rem;color:var(--sub);margin:4px 0 12px;min-height:40px}
+.switch input{width:20px;height:20px;accent-color:var(--accent)}
+.tl{list-style:none;margin:0;padding:0}
+.tl .dec{font-weight:900;font-size:1.3rem;margin:22px 0 4px;display:flex;align-items:center;gap:10px}
+.tl .dec::after{content:"";flex:1;border-top:2px solid var(--ink);opacity:.15}
+.yr{display:grid;grid-template-columns:74px 1fr;min-height:32px}
+.yr .when{text-align:right;padding:6px 12px 6px 0;border-right:2px solid var(--line);line-height:1.2}
+.yr .when b{display:block;font-size:1rem}
+.yr .when span{font-size:.72rem;color:var(--sub)}
+.yr.empty .when b{font-weight:500;color:var(--sub);font-size:.85rem}
+.yr.empty .when span{display:none}
+.yr.now .when{border-right-color:var(--accent)}
+.yr.now .when b{color:var(--accent)}
+.yr.ret .when{border-right-style:dashed}
+.yr .what{padding:4px 0 4px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.yr .when em{display:block;font-style:normal;font-size:.72rem;color:var(--accent);font-weight:700;margin-top:2px}
+.yr.q:not(.ystart) .when{padding-top:2px;padding-bottom:2px}
+.yr.ystart{margin-top:8px}
+.yr.ystart .when{border-top:2px solid var(--line)}
+.yr.ystart .what{border-top:1px dashed var(--line)}
+.yr.past{opacity:.55}
+.yr.q.empty.ystart .when span{display:inline}
+.qnote{margin:18px 0 4px;font-size:.8rem;color:var(--sub);font-weight:700;text-align:center;border-top:1.5px dashed var(--line);padding-top:8px}
+.fam{width:100%;font-size:.75rem;color:var(--sub)}
+.chip{display:inline-flex;align-items:baseline;gap:6px;border:1px solid var(--line);border-left:5px solid var(--c,var(--sub));background:var(--card);border-radius:8px;padding:5px 10px;font-size:.92rem;text-align:left;line-height:1.4;max-width:100%}
+.chip .cat{font-size:.7rem;color:var(--c);font-weight:700;white-space:nowrap}
+.chip .amt{font-size:.78rem;white-space:nowrap}
+.amt.out{color:var(--red)} .amt.in{color:var(--green)}
+.chip.goal{--c:var(--gold);background:var(--gold-soft)}
+.chip.goal.done{opacity:.6;text-decoration:line-through}
+.add{border:1px dashed var(--line);background:transparent;color:var(--sub);width:30px;height:30px;border-radius:50%;font-size:1rem;line-height:1;padding:0}
+.yr.empty .add{opacity:.45}
+.past{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:6px}
+
+/* ---- money ---- */
+.inline-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.inline-fields label{font-size:.85rem;color:var(--sub)}
+.unit{display:flex;align-items:center;gap:6px}
+.unit input{min-width:0}
+.chart-box{overflow-x:auto;margin:6px -4px 0}
+.chart{display:block;width:100%;min-width:320px;height:auto}
+.chart .gl{stroke:var(--line);stroke-width:1}
+.chart .gl.zero{stroke:var(--ink);stroke-width:1.5;opacity:.5}
+.chart .yl{fill:var(--sub);font-size:18px;text-anchor:end}
+.chart .xl{fill:var(--sub);font-size:18px;text-anchor:middle}
+.chart .ar.pos{fill:var(--accent);opacity:.15}
+.chart .ar.neg{fill:var(--red);opacity:.2}
+.chart .ln{fill:none;stroke-width:3;stroke-linejoin:round}
+.chart .ln.pos{stroke:var(--accent)} .chart .ln.neg{stroke:var(--red)}
+.chart .rt{stroke:var(--sub);stroke-dasharray:4 5;stroke-width:1.5}
+.chart .rtl{fill:var(--sub);font-size:17px}
+.flows{list-style:none;margin:0;padding:0}
+.flows li{border-bottom:1px solid var(--line)}
+.flows li:last-child{border-bottom:0}
+.flows button{width:100%;background:none;border:0;display:flex;justify-content:space-between;gap:12px;padding:12px 2px;text-align:left}
+.flows .nm small{display:block;color:var(--sub);font-size:.78rem}
+.flows .val{font-weight:700;white-space:nowrap}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.85rem;white-space:nowrap}
+th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line)}
+th{color:var(--sub);font-weight:500;position:sticky;top:0;background:var(--card)}
+td:first-child,th:first-child{text-align:left}
+tr.neg td:last-child{color:var(--red);font-weight:700}
+details summary{cursor:pointer;color:var(--accent);padding:8px 0;min-height:40px}
+
+/* ---- goals ---- */
+.goals{display:flex;flex-direction:column;gap:14px}
+.goal-card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:14px 16px}
+.goal-card.done{border-top-color:var(--green);opacity:.75}
+.gh{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:start}
+.check{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);background:transparent;color:transparent;font-weight:900}
+.done .check{background:var(--green);border-color:var(--green);color:#fff}
+.gmeta{font-size:.8rem;color:var(--sub);margin-top:2px}
+.why{margin:10px 0 0;padding-left:12px;border-left:3px solid var(--gold-soft);color:var(--sub);font-size:.9rem;white-space:pre-wrap}
+.steps{list-style:none;margin:10px 0 0;padding:0}
+.steps li{display:flex;align-items:center;gap:8px;padding:4px 0}
+.steps label{flex:1;display:flex;align-items:center;gap:10px;min-height:36px}
+.steps input{width:20px;height:20px;accent-color:var(--green);flex-shrink:0}
+.steps .fin{text-decoration:line-through;color:var(--sub)}
+.x{background:none;border:0;color:var(--sub);width:32px;height:32px;font-size:1.1rem}
+.addstep{display:flex;gap:8px;margin-top:8px}
+.addstep input{flex:1;min-width:0}
+.edit{background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.8rem;color:var(--sub);min-height:32px}
+
+/* ---- forms / sheet ---- */
+label.f{display:block;font-size:.85rem;color:var(--sub);margin:12px 0 4px}
+input[type=text],input[type=number],select,textarea{
+  width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;font-size:16px;min-height:44px}
+textarea{min-height:80px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
+.hint{font-size:.8rem;color:var(--accent);margin-top:4px}
+.err{color:var(--red);font-size:.85rem;margin-top:10px;min-height:1em}
+.sheet-wrap{position:fixed;inset:0;background:rgba(15,26,43,.45);display:flex;align-items:flex-end;justify-content:center;z-index:50}
+.sheet-wrap[hidden]{display:none}
+.sheet{background:var(--card);width:100%;max-width:560px;max-height:88%;overflow-y:auto;border-radius:20px 20px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px))}
+.sheet header{display:flex;justify-content:space-between;align-items:center}
+.sheet h3{font-size:1.15rem}
+.sheet .foot{display:flex;gap:10px;justify-content:space-between;margin-top:18px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ---- nav ---- */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--card);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(5,1fr)}
+.tabs button{background:none;border:0;padding:8px 0 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.72rem;color:var(--sub);min-height:56px}
+.tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
+#toast{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .2s;z-index:60;max-width:90%}
+#toast.show{opacity:1}
+.welcome{padding-top:24px}
+.welcome h1{font-size:2.4rem}
+.welcome .panel{margin-top:22px}
+.empty-note{padding:20px 16px;text-align:center;color:var(--sub);border:1.5px dashed var(--line);border-radius:14px;background:var(--card)}
+.empty-note .btn{margin-top:12px}
+/* ---- family table ---- */
+.seg{display:inline-flex;background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:3px;margin:4px 0 8px}
+.seg button{border:0;background:none;border-radius:999px;padding:6px 16px;font-size:.9rem;color:var(--sub);min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--paper);font-weight:700}
+.mo{font-size:.72rem;color:var(--sub);white-space:nowrap;font-weight:500}
+.who{font-size:.72rem;font-weight:700;color:var(--ink);background:var(--accent-soft);border-radius:4px;padding:0 5px;white-space:nowrap}
+.ftable-box{overflow:auto;max-height:70vh;max-height:calc(100dvh - 230px);border:1px solid var(--line);border-radius:12px;background:var(--card);margin-top:8px}
+.ft{border-collapse:separate;border-spacing:0;white-space:normal;font-size:.85rem;width:max-content;min-width:100%}
+.ft th,.ft td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:6px 8px}
+.ft thead th{position:sticky;top:0;z-index:3;background:var(--card);color:var(--ink);font-weight:700;min-width:124px;border-bottom:2px solid var(--ink)}
+.ft thead th small{display:block;color:var(--sub);font-weight:400;font-size:.7rem}
+.ft .stick{position:sticky;left:0;z-index:2;background:var(--card);min-width:58px;width:58px}
+.ft thead .stick{z-index:4}
+.ft tbody th.stick b{display:block;font-size:.9rem}
+.ft tbody th.stick span{font-size:.7rem;color:var(--sub);font-weight:400}
+.ft td{min-width:124px;max-width:170px}
+.ft td.need{min-width:92px;text-align:right;white-space:nowrap}
+.ft .fa{display:block;font-size:.72rem;color:var(--sub);margin-bottom:3px}
+.ft .fa.born{color:var(--accent);font-weight:700}
+.ft .chip{display:flex;flex-wrap:wrap;width:100%;font-size:.8rem;padding:4px 7px;margin-bottom:4px}
+.ft tr.now th.stick{box-shadow:inset 4px 0 0 var(--accent)}
+.ft tr.now td,.ft tr.now th{background:var(--accent-soft)}
+.ft tr.decrow td{background:var(--paper);font-weight:900;font-size:.95rem;padding:10px 8px 4px;position:sticky;left:0}
+.ft tr.empty td,.ft tr.empty th{padding-top:3px;padding-bottom:3px}
+.ft tr.ystart th,.ft tr.ystart td{border-top:2px solid var(--line)}
+.ft tr.past th,.ft tr.past td{opacity:.55}
+.ft .ql{display:block;font-size:.72rem;color:var(--accent);font-weight:700}
+.ft tr.decrow.note td{font-size:.8rem;font-weight:700;color:var(--sub);background:var(--card)}
+.cadd{display:block;border:1px dashed var(--line);background:none;color:var(--sub);border-radius:6px;width:100%;min-height:26px;font-size:.8rem;opacity:.55;padding:0}
+.cadd:hover,.cadd:focus-visible{opacity:1}
+.per-sum{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:10px}
+.per-sum div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.per-sum b{display:block}
+.per-sum small{color:var(--sub);font-size:.78rem;display:block}
+.presets{list-style:none;margin:6px 0 0;padding:0}
+.presets li{display:grid;grid-template-columns:1fr 110px;gap:8px;align-items:center;padding:4px 0;border-bottom:1px dashed var(--line)}
+.presets label{display:flex;align-items:center;gap:8px;min-height:40px;font-size:.92rem}
+.presets label input{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0}
+.presets label small{color:var(--sub)}
+.presets input[type=number]{min-height:38px;padding:6px 8px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap" id="view"></main>
+
+<nav class="tabs" id="tabs" hidden aria-label="画面の切り替え">
+  <button data-tab="home"><svg viewBox="0 0 24 24"><path d="M3 17h18M6 17v-3M10 17v-6M14 17v-3M18 17v-6"/></svg>設計図</button>
+  <button data-tab="timeline"><svg viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>年表</button>
+  <button data-tab="money"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 7l3.5 5 3.5-5M12 12v6M9 13h6M9 16h6"/></svg>お金</button>
+  <button data-tab="goals"><svg viewBox="0 0 24 24"><path d="M5 21V4h12l-2.5 4L17 12H5"/></svg>目標</button>
+  <button data-tab="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>設定</button>
+</nav>
+
+<div class="sheet-wrap" id="sheet" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <header><h3 id="sheetTitle"></h3><button class="x" onclick="closeSheet()" aria-label="閉じる">×</button></header>
+    <div id="sheetBody"></div>
+    <p class="err" id="sheetErr"></p>
+    <div class="foot">
+      <button class="btn danger small" id="sheetDel" onclick="sheetDelete()">削除</button>
+      <button class="btn" onclick="sheetSaveRun()" style="margin-left:auto">保存</button>
+    </div>
+  </div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const KEY = 'jinsei-sekkeizu-v1';
+const Y = new Date().getFullYear();
+const M = new Date().getMonth()+1;
+const evSort = (a,b) => a.year-b.year || (num(a.month)||0)-(num(b.month)||0);
+const ymLabel = e => `${e.year}年${e.month?e.month+'月':''}`;
+const monthTag = e => e.month ? `<span class="mo">${e.month}月</span>` : '';
+const CATS = {
+  work:{l:'仕事',c:'#2E6FD8'}, family:{l:'家族',c:'#D0648E'}, home:{l:'住まい',c:'#9B6B3F'},
+  learn:{l:'学び',c:'#7A5CC2'}, health:{l:'健康',c:'#2F8F66'}, play:{l:'趣味・旅',c:'#E07B2E'},
+  money:{l:'お金',c:'#1C9AA0'}, other:{l:'その他',c:'#7D8898'}
+};
+const $ = s => document.querySelector(s);
+const uid = () => Math.random().toString(36).slice(2,10);
+const h = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = (v, d=0) => { const n = parseFloat(v); return isFinite(n) ? n : d; };
+
+function defaults(){
+  return { profile:{name:'',birthYear:Y-40,lifespan:90,retireAge:65,family:[]},
+           events:[], money:{savings:0,rate:1,incomes:[],expenses:[]}, goals:[] };
+}
+function normalize(d){
+  const b = defaults();
+  const o = Object.assign(b, d || {});
+  o.profile = Object.assign(defaults().profile, o.profile || {});
+  o.profile.family = Array.isArray(o.profile.family) ? o.profile.family : [];
+  o.money = Object.assign(defaults().money, o.money || {});
+  ['incomes','expenses'].forEach(k => { if(!Array.isArray(o.money[k])) o.money[k] = []; });
+  ['events','goals'].forEach(k => { if(!Array.isArray(o[k])) o[k] = []; });
+  o.goals.forEach(g => { if(!Array.isArray(g.steps)) g.steps = []; });
+  o.events.forEach(e => { if(!e.who) e.who = 'me'; });
+  return o;
+}
+function load(){
+  try { const r = localStorage.getItem(KEY); if(r) return normalize(JSON.parse(r)); } catch(e) {}
+  return null;
+}
+function save(){
+  if(S && S.events) S.events.sort(evSort);
+  try { localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e){ toast('保存できませんでした。ブラウザの保存領域を確認してください'); }
+}
+let S = load();
+let tab = 'home';
+let tlOnlyFilled = false;
+let tlMode = null; // 'list' | 'family'（null は家族がいれば一覧表）
+
+const P = () => S.profile;
+const nowAge = () => Y - P().birthYear;
+const yOf = a => P().birthYear + a;
+const aOf = y => y - P().birthYear;
+const people = () => [{id:'me', name:P().name||'わたし', birthYear:P().birthYear}, ...P().family];
+const personOf = id => people().find(m=>m.id===id) || people()[0];
+const whoTag = e => (e.who && e.who!=='me') ? `<span class="who">${h(personOf(e.who).name)}</span>` : '';
+
+function fm(v){
+  v = Math.round(v); const a = Math.abs(v);
+  if(a >= 10000) return (v<0?'−':'') + (a/10000).toFixed(a>=100000?0:1).replace(/\.0$/,'') + '億円';
+  return (v<0?'−':'') + a.toLocaleString('ja-JP') + '万円';
+}
+function fmShort(v){
+  const a = Math.abs(v);
+  if(a >= 10000) return (v<0?'−':'') + +(a/10000).toFixed(1) + '億';
+  return (v<0?'−':'') + a.toLocaleString('ja-JP') + '万';
+}
+let toastTimer;
+function toast(t){ const el=$('#toast'); el.textContent=t; el.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),2200); }
+
+/* ---------- simulation ---------- */
+function sim(){
+  const p = P(), m = S.money, a0 = Math.max(0, nowAge());
+  let bal = num(m.savings); const rows = [];
+  for(let a=a0; a<=p.lifespan; a++){
+    const yr = yOf(a); let inc=0, exp=0, one=0;
+    m.incomes.forEach(i => { if(a>=i.from && a<=i.to) inc += num(i.amount); });
+    m.expenses.forEach(i => { if(a>=i.from && a<=i.to) exp += num(i.amount); });
+    S.events.forEach(e => { if(e.year===yr && e.amt) one += (e.dir==='in' ? 1 : -1) * num(e.amt); });
+    S.goals.forEach(g => { if(!g.done && g.age===a && g.cost) one -= num(g.cost); });
+    const interest = bal > 0 ? bal * num(m.rate)/100 : 0;
+    bal = bal + interest + inc - exp + one;
+    rows.push({a, yr, inc, exp, one, interest, bal});
+  }
+  return rows;
+}
+function upcoming(){
+  const list = [];
+  S.events.forEach(e => { if(e.year>Y || (e.year===Y && (!e.month || e.month>=M))) list.push({kind:'ev', year:e.year, month:e.month, title:e.title, cat:e.cat, id:e.id, who:e.who}); });
+  S.goals.forEach(g => { const yr=yOf(g.age); if(!g.done && yr>=Y) list.push({kind:'goal', year:yr, title:g.title, id:g.id}); });
+  return list.sort(evSort);
+}
+
+/* ---------- render ---------- */
+function render(){
+  const nav = $('#tabs');
+  if(!S){ nav.hidden = true; $('#view').innerHTML = vWelcome(); return; }
+  nav.hidden = false;
+  nav.querySelectorAll('button').forEach(b => { if(b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
+  const v = {home:vHome, timeline:vTimeline, money:vMoney, goals:vGoals, settings:vSettings}[tab];
+  $('#view').innerHTML = v();
+}
+function go(t){ tab=t; render(); window.scrollTo(0,0); }
+$('#tabs').addEventListener('click', e => { const b=e.target.closest('button[data-tab]'); if(b) go(b.dataset.tab); });
+
+function vWelcome(){
+  return `<section class="welcome">
+    <h1>人生設計図</h1>
+    <p class="lead">年表・お金・目標を一枚にまとめて、これからの人生を見渡すためのノートです。データはこの端末のブラウザの中だけに保存されます。</p>
+    <div class="panel">
+      <label class="f" for="w_name">名前（空欄でもOK）</label>
+      <input type="text" id="w_name" placeholder="例：佐々木">
+      <div class="two">
+        <div><label class="f" for="w_by">生まれた年（西暦）</label><input type="number" inputmode="numeric" id="w_by" value="${Y-40}"></div>
+        <div><label class="f" for="w_ret">退職予定の年齢</label><input type="number" inputmode="numeric" id="w_ret" value="65"></div>
+      </div>
+      <label class="f" for="w_life">何歳までの設計図にしますか</label>
+      <input type="number" inputmode="numeric" id="w_life" value="90">
+      <p class="err" id="w_err"></p>
+      <button class="btn" style="width:100%;margin-top:6px" onclick="startApp()">設計図をつくる</button>
+    </div>
+    <p style="text-align:center;margin-top:14px"><button class="link" onclick="startSample()">サンプルデータで試してみる</button></p>
+  </section>`;
+}
+function startApp(){
+  const by = Math.round(num($('#w_by').value, NaN)), life = Math.round(num($('#w_life').value, NaN)), ret = Math.round(num($('#w_ret').value, 65));
+  const err = $('#w_err');
+  if(!(by>1900 && by<=Y)) { err.textContent='生まれた年を西暦4桁で入力してください'; return; }
+  if(!(life > Y-by && life <= 120)) { err.textContent=`設計図の年齢は ${Y-by+1}〜120 の範囲で入力してください`; return; }
+  S = defaults();
+  Object.assign(S.profile, {name:$('#w_name').value.trim(), birthYear:by, lifespan:life, retireAge:ret});
+  save(); tab='home'; render(); toast('設計図をつくりました');
+}
+function startSample(){
+  S = defaults(); const by = Y-45;
+  Object.assign(S.profile, {name:'', birthYear:by, lifespan:90, retireAge:65,
+    family:[{id:'fp',name:'パートナー',birthYear:by+2,birthMonth:''},{id:'fs',name:'長男',birthYear:Y-15,birthMonth:6},{id:'fd',name:'長女',birthYear:Y-11,birthMonth:2}]});
+  S.money = {savings:800, rate:1, incomes:[
+      {id:uid(),name:'給与（手取り）',amount:620,from:45,to:64},
+      {id:uid(),name:'年金（世帯）',amount:260,from:65,to:90}],
+    expenses:[
+      {id:uid(),name:'生活費',amount:340,from:45,to:90},
+      {id:uid(),name:'住宅ローン',amount:110,from:45,to:62},
+      {id:uid(),name:'教育費',amount:90,from:45,to:56}]};
+  const ev = (who,ym,title,cat,dir,amt) => { const [year,month]=Array.isArray(ym)?ym:[ym,'']; return {id:uid(),who,year,month,title,cat,dir:dir||'',amt:amt||'',memo:''}; };
+  S.events = [
+    ev('fs',[Y+1,4],'高校入学','learn','out',60), ev('fs',[Y+4,4],'大学入学','learn','out',150), ev('fs',[Y+8,4],'就職','work'),
+    ev('fd',[Y+1,4],'中学校入学','learn','out',30), ev('fd',[Y+4,4],'高校入学','learn','out',60), ev('fd',[Y+7,4],'大学入学','learn','out',150),
+    ev('fp',by+2+60,'還暦','family','out',30),
+    ev('me',[Y+5,9],'車の買い替え','other','out',250),
+    ev('me',[by+65,3],'退職金','work','in',1500),
+    ev('me',by+68,'自宅リフォーム','home','out',400)];
+  S.goals = [
+    {id:uid(),title:'技術士の資格をとる',age:48,cat:'learn',cost:30,why:'現場の経験を形にしておきたい',done:false,
+      steps:[{id:uid(),text:'過去問を1年分解く',done:true},{id:uid(),text:'講座に申し込む',done:false},{id:uid(),text:'論文対策',done:false}]},
+    {id:uid(),title:'夫婦で世界一周',age:66,cat:'play',cost:400,why:'',done:false,
+      steps:[{id:uid(),text:'行きたい国を10か国書き出す',done:false}]},
+    {id:uid(),title:'地域で小さな拠点をつくる',age:60,cat:'work',cost:0,why:'退職後も地域と関わる場所がほしい',done:false,steps:[]}];
+  save(); tab='home'; render(); toast('サンプルを読み込みました。設定から全消去できます');
+}
+
+/* ---------- home ---------- */
+function ruler(){
+  const p=P(), L=p.lifespan, a0=nowAge(), W=1000, x0=30, x1=970, ax=150;
+  const X = a => x0 + (x1-x0) * Math.min(Math.max(a,0),L) / L;
+  let s = `<svg viewBox="0 0 ${W} 205" class="ruler" role="img" aria-label="0歳から${L}歳までの人生の物差し。いま${a0}歳">`;
+  s += `<line x1="${x0}" x2="${X(a0)}" y1="${ax}" y2="${ax}" class="ax-past"/><line x1="${X(a0)}" x2="${x1}" y1="${ax}" y2="${ax}" class="ax-fut"/>`;
+  for(let a=0; a<=L; a++){
+    const x=X(a), big=a%10===0, mid=a%5===0;
+    s += `<line x1="${x}" x2="${x}" y1="${ax+6}" y2="${ax+(big?24:mid?16:10)}" class="tk${big?' big':''}"/>`;
+    if(big) s += `<text x="${x}" y="${ax+52}" class="tl">${a}</text>`;
+  }
+  if(p.retireAge>0 && p.retireAge<=L){
+    const rx=X(p.retireAge);
+    s += `<line x1="${rx}" x2="${rx}" y1="${ax-78}" y2="${ax}" class="ret"/><text x="${rx+8}" y="${ax-64}" class="retl">退職 ${p.retireAge}歳</text>`;
+  }
+  const stack = {};
+  const slot = a => { const k=Math.round(a/2); stack[k]=(stack[k]||0)+1; return Math.max(58, ax-18-(stack[k]-1)*20); };
+  S.events.slice().sort((a,b)=>a.year-b.year).forEach(e => {
+    const a=aOf(e.year); if(a<0||a>L) return;
+    s += `<circle cx="${X(a)}" cy="${slot(a)}" r="8" fill="${(CATS[e.cat]||CATS.other).c}"><title>${h(a+'歳 '+e.title)}</title></circle>`;
+  });
+  S.goals.slice().sort((a,b)=>a.age-b.age).forEach(g => {
+    if(g.age<0||g.age>L) return; const x=X(g.age), y=slot(g.age);
+    s += `<path d="M${x} ${y-9} L${x+9} ${y} L${x} ${y+9} L${x-9} ${y} Z" class="gm${g.done?'':' open'}"><title>${h(g.age+'歳 目標：'+g.title)}</title></path>`;
+  });
+  const nx = X(a0), lx = Math.min(Math.max(nx, 95), W-95);
+  s += `<g class="now"><line x1="${nx}" x2="${nx}" y1="46" y2="${ax+8}"/><rect x="${lx-78}" y="4" width="156" height="42" rx="21"/><text x="${lx}" y="34">いま ${a0}歳</text></g>`;
+  return s + `</svg>`;
+}
+function vHome(){
+  const p=P(), a0=nowAge(), rows=sim(), up=upcoming();
+  const gd=S.goals.filter(g=>g.done).length, gt=S.goals.length;
+  const ret = rows.find(r=>r.a===p.retireAge);
+  const last = rows[rows.length-1];
+  const neg = rows.find(r=>r.bal<0);
+  const hasMoney = S.money.incomes.length || S.money.expenses.length || num(S.money.savings);
+  const next = up[0];
+  const soon = up.filter(x=>x.year<=Y+10);
+  const cats = [...new Set(S.events.map(e=>e.cat))];
+  let out = `<h1>${p.name?h(p.name)+'さんの':'わたしの'}人生設計図</h1>
+    <p class="lead">いま${a0}歳。${p.lifespan}歳まで、あと${p.lifespan-a0}年ぶんの設計図です。</p>
+    <div class="ruler-box">${ruler()}</div>`;
+  if(cats.length || gt){
+    out += `<div class="legend">${cats.map(c=>`<span><i style="background:${(CATS[c]||CATS.other).c}"></i>${(CATS[c]||CATS.other).l}</span>`).join('')}${gt?'<span><i class="dia"></i>目標</span>':''}</div>`;
+  }
+  out += `<h2>いまの見通し</h2><div class="panel facts">
+    <div class="fact"><span class="k">次の予定</span><span class="v">${next?`${next.who&&next.who!=='me'?h(personOf(next.who).name)+'　':''}${h(next.title)}<small>${ymLabel(next)}（${next.year===Y?'今年':'あと'+(next.year-Y)+'年'}）</small>`:'<small>年表にイベントを追加しましょう</small>'}</span></div>
+    <div class="fact"><span class="k">目標の達成</span><span class="v">${gt?`${gd} / ${gt}<div class="progress"><div style="width:${gt?gd/gt*100:0}%"></div></div>`:'<small>まだ目標がありません</small>'}</span></div>
+    <div class="fact"><span class="k">${ret?`退職時（${p.retireAge}歳）の貯蓄`:`${p.lifespan}歳時点の貯蓄`}</span><span class="v">${hasMoney?`<span class="${(ret||last).bal<0?'warn':''}">${fm((ret||last).bal)}</span>`:'<small>お金のタブで入力できます</small>'}</span></div>
+    ${hasMoney && neg ? `<div class="fact"><span class="k warn">注意</span><span class="v warn">${neg.a}歳（${neg.yr}年）で貯蓄がマイナスになります<small>お金のタブで収支を見直せます</small></span></div>`:''}
+    ${hasMoney && !neg && ret ? `<div class="fact"><span class="k">${p.lifespan}歳時点の貯蓄</span><span class="v">${fm(last.bal)}</span></div>`:''}
+  </div>`;
+  out += `<h2>これからの10年</h2>`;
+  if(soon.length){
+    out += `<ul class="soon">${soon.map(x=>`<li><span class="yrs">${x.year===Y?'今年':x.year-Y+'年後'}<small>${aOf(x.year)}歳</small></span><button class="chip ${x.kind==='goal'?'goal':''}" style="${x.kind==='ev'?`--c:${(CATS[x.cat]||CATS.other).c}`:''}" onclick="${x.kind==='ev'?`editEvent('${x.id}')`:`go('goals')`}">${x.kind==='goal'?'<span class="cat">目標</span>':`<span class="cat">${(CATS[x.cat]||CATS.other).l}</span>${whoTag(x)}`}${monthTag(x)}${h(x.title)}</button></li>`).join('')}</ul>`;
+  } else {
+    out += `<div class="empty-note">10年以内の予定はまだありません。<br>進学、住まい、仕事の節目などを置いてみましょう。<br><button class="btn" onclick="editEvent()">イベントを追加</button></div>`;
+  }
+  return out;
+}
+
+/* ---------- timeline ---------- */
+function chipEv(e){
+  const c = CATS[e.cat]||CATS.other;
+  return `<button class="chip" style="--c:${c.c}" onclick="editEvent('${e.id}')"><span class="cat">${c.l}</span>${whoTag(e)}${monthTag(e)}${h(e.title)}${e.amt?`<span class="amt ${e.dir==='in'?'in':'out'}">${e.dir==='in'?'+':'−'}${fm(num(e.amt))}</span>`:''}</button>`;
+}
+function chipGoal(g){
+  return `<button class="chip goal ${g.done?'done':''}" onclick="go('goals')"><span class="cat">目標</span>${h(g.title)}</button>`;
+}
+function vTimeline(){
+  const p=P(), a0=nowAge();
+  const mode = tlMode || (p.family.length ? 'family' : 'list');
+  let out = `<div class="bar"><h1>年表</h1><button class="btn small" onclick="editEvent()">＋ イベント</button></div>
+    <div class="seg" role="group" aria-label="表示の切り替え">
+      <button aria-pressed="${mode==='family'}" onclick="tlMode='family';render()">家族一覧表</button>
+      <button aria-pressed="${mode==='list'}" onclick="tlMode='list';render()">リスト</button>
+    </div><br>
+    <label class="switch"><input type="checkbox" ${tlOnlyFilled?'checked':''} onchange="tlOnlyFilled=this.checked;render()">予定のある年だけ表示</label>`;
+  if(mode==='family') return out + vFamilyTable();
+  const past = S.events.filter(e=>e.year<Y).sort((a,b)=>a.year-b.year);
+  if(past.length){
+    out += `<details><summary>これまでの出来事（${past.length}件）</summary><ul class="past">${past.map(e=>`<li><span class="muted">${aOf(e.year)}歳（${ymLabel(e)}）</span> ${chipEv(e)}</li>`).join('')}</ul></details>`;
+  }
+  out += `<ol class="tl">`;
+  let lastDec=null, noted=false;
+  tlSlots().forEach(s=>{
+    const {yr,a}=s, filled=s.events.length+s.goals.length>0;
+    const d0=Math.floor(a/10)*10;
+    if(d0!==lastDec){ out += `<li class="dec">${d0}代</li>`; lastDec=d0; }
+    const fam = (filled && s.first) ? p.family.map(f=>{const fa=yr-num(f.birthYear); return fa>=0 ? `${h(f.name)} ${fa===0?'誕生':fa+'歳'}` : '';}).filter(Boolean).join('　') : '';
+    const ret = s.first && a===p.retireAge;
+    const when = s.q===0 ? `<b>${a}歳</b><span>${yr}年</span>` : `${s.first?`<b>${a}歳</b><span>${yr}年</span>`:''}<em>${qLabel(s.q)}</em>`;
+    out += `<li class="yr ${s.q!==0?'q':''} ${filled?'':'empty'} ${s.now?'now':''} ${ret?'ret':''} ${s.first&&s.q!==0?'ystart':''} ${s.past?'past':''}">
+      <div class="when">${when}</div>
+      <div class="what">${fam?`<div class="fam">${fam}</div>`:''}${ret?'<span class="muted">退職予定</span>':''}${s.events.map(chipEv).join('')}${s.goals.map(chipGoal).join('')}<button class="add" onclick="editEvent(null,${yr},'me',${qMonth(s.q)})" aria-label="${yr}年${qLabel(s.q)}にイベントを追加">＋</button></div>
+    </li>`;
+  });
+  return out + `</ol>`;
+}
+const qLabel = q => q===0 ? '' : q==='u' ? '月未定' : `${q*3-2}〜${q*3}月`;
+const qMonth = q => (q===0 || q==='u') ? "''" : q*3-2;
+function tlSlots(){
+  const p=P(), a0=nowAge(), out=[];
+  for(let a=a0; a<=p.lifespan; a++){
+    const yr=yOf(a), evs=S.events.filter(e=>e.year===yr), gs=S.goals.filter(g=>g.age===a);
+    if(tlOnlyFilled && !(evs.length+gs.length)) continue;
+    out.push({q:0, yr, a, events:evs, goals:gs, first:true, now:a===a0});
+  }
+  return out;
+}
+function vFamilyTable(){
+  const p=P(), a0=nowAge(), ppl=people();
+  const future = e => e.year>=Y;
+  const sums = ppl.map(m=>{
+    const evs=S.events.filter(e=>(e.who||'me')===m.id && future(e));
+    const need=evs.filter(e=>e.amt&&e.dir!=='in').reduce((s,e)=>s+num(e.amt),0)
+      + (m.id==='me' ? S.goals.filter(g=>!g.done&&num(g.cost)>0&&yOf(g.age)>=Y).reduce((s,g)=>s+num(g.cost),0) : 0);
+    return {m, n:evs.length, need};
+  });
+  const total = sums.reduce((s,x)=>s+x.need,0);
+  let out = `<div class="per-sum">${sums.map(x=>`<div><b>${h(x.m.name)}</b><small>これからの予定 ${x.n}件</small><small>必要資金 ${x.need?fm(x.need):'―'}</small></div>`).join('')}
+    <div style="border-color:var(--accent)"><b>家族の合計</b><small>必要資金</small><b>${fm(total)}</b></div></div>`;
+  if(!p.family.length){
+    out += `<div class="empty-note" style="margin-top:12px">家族を登録すると、ここに列が増えます。<br><button class="btn" onclick="editFamily()">家族を追加</button></div>`;
+  }
+  const cols = ppl.length + 2;
+  out += `<div class="ftable-box"><table class="ft"><thead><tr><th class="stick">年</th>${ppl.map(m=>`<th>${h(m.name)}<small>${m.birthYear}年生まれ</small></th>`).join('')}<th>必要資金<small>その年の出入り</small></th></tr></thead><tbody>`;
+  let lastDec = null, noted = false;
+  tlSlots().forEach(s=>{
+    const {yr,a}=s, filled=s.events.length+s.goals.length>0;
+    const d0=Math.floor(a/10)*10;
+    if(d0!==lastDec){ out += `<tr class="decrow"><td colspan="${cols}">わたし ${d0}代</td></tr>`; lastDec=d0; }
+    let need=0, inc=0;
+    s.events.forEach(e=>{ if(e.amt){ if(e.dir==='in') inc+=num(e.amt); else need+=num(e.amt); } });
+    s.goals.forEach(g=>{ if(!g.done) need+=num(g.cost); });
+    const head = s.q===0 ? `<b>${yr}</b>` : `${s.first?`<b>${yr}</b>`:''}<span class="ql">${qLabel(s.q)}</span>`;
+    out += `<tr class="${s.now?'now':''} ${filled?'':'empty'} ${s.first&&s.q!==0?'ystart':''} ${s.past?'past':''}"><th class="stick" scope="row">${head}</th>`;
+    ppl.forEach(m=>{
+      const age=yr-num(m.birthYear);
+      const mine=s.events.filter(e=>(e.who||'me')===m.id);
+      const chips=mine.map(chipEvT).join('') + (m.id==='me'?s.goals.map(chipGoal).join(''):'');
+      const ageTxt = (age<0 || !s.first) ? '' : `<span class="fa${age===0?' born':''}">${age===0?'誕生':age+'歳'}</span>`;
+      out += `<td>${ageTxt}${chips}${age>=0?`<button class="cadd" onclick="editEvent(null,${yr},'${m.id}',${qMonth(s.q)})" aria-label="${h(m.name)}の${yr}年${qLabel(s.q)}にイベントを追加">＋</button>`:''}</td>`;
+    });
+    out += `<td class="need">${need?`<span class="amt out">−${fm(need)}</span>`:''}${inc?`<br><span class="amt in">+${fm(inc)}</span>`:''}</td></tr>`;
+  });
+  out += `</tbody></table></div>
+    <p class="muted" style="margin-top:8px">年齢はその年の誕生日を迎えたあとの年齢です。マスの「＋」から、その人のイベントを追加できます。</p>`;
+  return out;
+}
+function chipEvT(e){
+  const c = CATS[e.cat]||CATS.other;
+  return `<button class="chip" style="--c:${c.c}" onclick="editEvent('${e.id}')">${monthTag(e)}<span>${h(e.title)}</span>${e.amt?`<span class="amt ${e.dir==='in'?'in':'out'}">${e.dir==='in'?'+':'−'}${fm(num(e.amt))}</span>`:''}</button>`;
+}
+function catOptions(sel){ return Object.entries(CATS).map(([k,v])=>`<option value="${k}" ${k===sel?'selected':''}>${v.l}</option>`).join(''); }
+function whoOptions(sel){ return people().map(m=>`<option value="${m.id}" ${m.id===sel?'selected':''}>${h(m.name)}</option>`).join(''); }
+function evSync(){
+  const m=personOf($('#f_who').value), age=Math.round(num($('#f_age').value,NaN));
+  $('#f_agel').textContent = `${m.id==='me'?'わたし':m.name}の年齢`;
+  if(!isFinite(age)){ $('#f_yr').textContent=''; return; }
+  const yr=num(m.birthYear)+age, mo=$('#f_mo').value, ym=`${yr}年${mo?mo+'月':''}`;
+  $('#f_yr').textContent = m.id==='me' ? ym : `${ym}（わたし ${aOf(yr)}歳）`;
+}
+function evWhoChange(sel){
+  const prev=personOf(sel.dataset.prev), age=num($('#f_age').value,NaN);
+  if(isFinite(age)){ const yr=num(prev.birthYear)+Math.round(age); $('#f_age').value = yr-num(personOf(sel.value).birthYear); }
+  sel.dataset.prev=sel.value; evSync();
+}
+function editEvent(id, year, who, month){
+  const isNew = !id;
+  const e = id ? S.events.find(x=>x.id===id) : {id:uid(), who:who||'me', year:year||Y, month:month||'', title:'', cat:'family', dir:'', amt:'', memo:''};
+  if(!e) return;
+  const m = personOf(e.who||'me');
+  openSheet(isNew?'イベントを追加':'イベントを編集', `
+    <label class="f" for="f_title">できごと</label>
+    <input type="text" id="f_title" value="${h(e.title)}" placeholder="例：大学入学、結婚、家を建てる">
+    <div class="two">
+      <div><label class="f" for="f_who">だれのイベント</label><select id="f_who" data-prev="${m.id}" onchange="evWhoChange(this)">${whoOptions(m.id)}</select></div>
+      <div><label class="f" for="f_cat">分類</label><select id="f_cat">${catOptions(e.cat)}</select></div>
+    </div>
+    <div class="two">
+      <div><label class="f" for="f_age" id="f_agel"></label><input type="number" inputmode="numeric" id="f_age" value="${e.year-num(m.birthYear)}" oninput="evSync()"></div>
+      <div><label class="f" for="f_mo">月（任意）</label><select id="f_mo" onchange="evSync()"><option value="">―</option>${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${num(e.month)===i+1?'selected':''}>${i+1}月</option>`).join('')}</select></div>
+    </div>
+    <p class="hint" id="f_yr"></p>
+    <div class="two">
+      <div><label class="f" for="f_dir">必要資金・お金の動き</label><select id="f_dir"><option value="">なし</option><option value="out" ${e.dir==='out'?'selected':''}>必要（出ていく）</option><option value="in" ${e.dir==='in'?'selected':''}>入ってくる</option></select></div>
+      <div><label class="f" for="f_amt">金額（万円）</label><input type="number" inputmode="decimal" id="f_amt" value="${h(e.amt)}" placeholder="例：150"></div>
+    </div>
+    <label class="f" for="f_memo">メモ</label>
+    <textarea id="f_memo" placeholder="例：入学金と初年度の授業料、準備は前年から">${h(e.memo)}</textarea>`,
+  () => {
+    const t=$('#f_title').value.trim(), who=$('#f_who').value, pm=personOf(who), a=Math.round(num($('#f_age').value,NaN));
+    if(!t) return 'できごとを入力してください';
+    if(!isFinite(a) || a<0) return '年齢を0以上で入力してください';
+    const yr=num(pm.birthYear)+a;
+    if(yr>yOf(P().lifespan)) return `設計図の期間（${yOf(P().lifespan)}年まで）を超えています`;
+    const dir=$('#f_dir').value, amt=num($('#f_amt').value);
+    if(dir && !(amt>0)) return '金額を入力するか、お金の動きを「なし」にしてください';
+    const mo=$('#f_mo').value;
+    Object.assign(e, {title:t, who, year:yr, month:mo?+mo:'', cat:$('#f_cat').value, dir, amt:dir?amt:'', memo:$('#f_memo').value});
+    if(isNew) S.events.push(e);
+    toast(isNew?'イベントを追加しました':'イベントを保存しました');
+  }, isNew ? null : () => { S.events = S.events.filter(x=>x.id!==id); toast('イベントを削除しました'); });
+  evSync();
+}
+
+/* ---------- money ---------- */
+function nice(x){ if(!(x>0)) return 100; const m=10**Math.floor(Math.log10(x)), f=x/m; return (f<=1?1:f<=2?2:f<=5?5:10)*m; }
+function chart(rows){
+  if(rows.length<2) return '<p class="muted">グラフを表示するには、設計図の期間を2年以上にしてください。</p>';
+  const W=700,H=300,pl=80,pr=14,pt=20,pb=40;
+  const v=rows.map(r=>r.bal); let mx=Math.max(0,...v), mn=Math.min(0,...v); if(mx-mn<1) mx=mn+100;
+  const st=nice((mx-mn)/4); mx=Math.ceil(mx/st)*st; mn=Math.floor(mn/st)*st;
+  const X=i=>pl+(W-pl-pr)*i/(rows.length-1), Yv=b=>pt+(H-pt-pb)*(mx-b)/(mx-mn), y0=Yv(0);
+  const line=rows.map((r,i)=>`${i?'L':'M'}${X(i).toFixed(1)},${Yv(r.bal).toFixed(1)}`).join('');
+  const area=`${line}L${X(rows.length-1).toFixed(1)},${y0.toFixed(1)}L${X(0).toFixed(1)},${y0.toFixed(1)}Z`;
+  let g='';
+  for(let k=0; mn+k*st<=mx+1e-9; k++){ const t=mn+k*st, y=Yv(t); g+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" class="gl${t===0?' zero':''}"/><text x="${pl-8}" y="${y+6}" class="yl">${fmShort(t)}</text>`; }
+  rows.forEach((r,i)=>{ if(r.a%10===0) g+=`<text x="${X(i)}" y="${H-12}" class="xl">${r.a}歳</text>`; });
+  const ri=rows.findIndex(r=>r.a===P().retireAge);
+  if(ri>=0) g+=`<line x1="${X(ri)}" x2="${X(ri)}" y1="${pt}" y2="${H-pb}" class="rt"/><text x="${X(ri)+6}" y="${pt+14}" class="rtl">退職</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="年齢ごとの貯蓄残高の推移">
+    <defs><clipPath id="cpos"><rect x="0" y="0" width="${W}" height="${y0}"/></clipPath><clipPath id="cneg"><rect x="0" y="${y0}" width="${W}" height="${H}"/></clipPath></defs>
+    ${g}<path d="${area}" class="ar pos" clip-path="url(#cpos)"/><path d="${area}" class="ar neg" clip-path="url(#cneg)"/>
+    <path d="${line}" class="ln pos" clip-path="url(#cpos)"/><path d="${line}" class="ln neg" clip-path="url(#cneg)"/></svg>`;
+}
+function flowList(kind){
+  const list=S.money[kind];
+  if(!list.length) return `<p class="muted" style="padding:6px 2px">${kind==='incomes'?'給与や年金など、毎年入ってくるお金を追加します':'生活費や住宅ローンなど、毎年出ていくお金を追加します'}</p>`;
+  return `<ul class="flows">${list.map(i=>`<li><button onclick="editFlow('${kind}','${i.id}')"><span class="nm">${h(i.name)}<small>${i.from}歳〜${i.to}歳</small></span><span class="val">${fm(num(i.amount))}／年</span></button></li>`).join('')}</ul>`;
+}
+function vMoney(){
+  const m=S.money, p=P(), rows=sim();
+  const neg=rows.find(r=>r.bal<0), last=rows[rows.length-1], ret=rows.find(r=>r.a===p.retireAge);
+  const minR=rows.reduce((a,r)=>r.bal<a.bal?r:a, rows[0]||{bal:0,a:0});
+  const oneOffs=[...S.events.filter(e=>e.amt&&e.year>=Y).map(e=>({a:aOf(e.year),mo:e.month,t:(e.who&&e.who!=='me'?personOf(e.who).name+'：':'')+e.title,v:(e.dir==='in'?1:-1)*num(e.amt)})),
+                 ...S.goals.filter(g=>!g.done&&num(g.cost)>0).map(g=>({a:g.age,t:'目標：'+g.title,v:-num(g.cost)}))].sort((a,b)=>a.a-b.a||(num(a.mo)||0)-(num(b.mo)||0));
+  return `<h1>お金</h1>
+  <p class="lead">金額はすべて万円で入力します。年表と目標に入れた金額も、その年の出入りとして計算に入ります。</p>
+  <div class="panel" style="margin-top:14px"><div class="inline-fields">
+    <div><label for="m_sv">いまの貯蓄</label><div class="unit"><input type="number" inputmode="decimal" id="m_sv" value="${h(m.savings)}" onchange="setMoney('savings',this.value)"><span>万円</span></div></div>
+    <div><label for="m_rt">運用利回り（年）</label><div class="unit"><input type="number" inputmode="decimal" step="0.1" id="m_rt" value="${h(m.rate)}" onchange="setMoney('rate',this.value)"><span>%</span></div></div>
+  </div></div>
+  <h2>貯蓄の推移</h2>
+  <div class="panel">
+    <div class="chart-box">${chart(rows)}</div>
+    <div class="facts" style="margin:8px -16px -16px">
+      ${ret?`<div class="fact"><span class="k">退職時（${p.retireAge}歳）</span><span class="v ${ret.bal<0?'warn':''}">${fm(ret.bal)}</span></div>`:''}
+      ${last?`<div class="fact"><span class="k">${p.lifespan}歳時点</span><span class="v ${last.bal<0?'warn':''}">${fm(last.bal)}</span></div>`:''}
+      ${minR?`<div class="fact"><span class="k">いちばん少ない時</span><span class="v ${minR.bal<0?'warn':''}">${fm(minR.bal)}<small>${minR.a}歳</small></span></div>`:''}
+      ${neg?`<div class="fact"><span class="k warn">注意</span><span class="v warn">${neg.a}歳でマイナスになります</span></div>`:''}
+    </div>
+  </div>
+  <h2>毎年の収入</h2><div class="panel">${flowList('incomes')}<button class="btn ghost small" style="margin-top:8px" onclick="editFlow('incomes')">＋ 収入を追加</button></div>
+  <h2>毎年の支出</h2><div class="panel">${flowList('expenses')}<button class="btn ghost small" style="margin-top:8px" onclick="editFlow('expenses')">＋ 支出を追加</button></div>
+  <h2>一時的な出入り</h2><div class="panel">
+    ${oneOffs.length?`<ul class="flows">${oneOffs.map(o=>`<li><button onclick="go('timeline')"><span class="nm">${h(o.t)}<small>${o.a}歳${o.mo?'　'+o.mo+'月':''}</small></span><span class="val amt ${o.v<0?'out':'in'}">${o.v<0?'−':'+'}${fm(Math.abs(o.v))}</span></button></li>`).join('')}</ul>`
+      :'<p class="muted">年表のイベントや目標に金額を入れると、ここに並びます。</p>'}
+  </div>
+  <details style="margin-top:18px"><summary>年ごとの表を見る</summary>
+    <div class="panel scroll" style="padding:8px;max-height:60vh"><table>
+      <thead><tr><th>年齢</th><th>西暦</th><th>収入</th><th>支出</th><th>一時</th><th>運用</th><th>残高</th></tr></thead>
+      <tbody>${rows.map(r=>`<tr class="${r.bal<0?'neg':''}"><td>${r.a}歳</td><td>${r.yr}</td><td>${Math.round(r.inc).toLocaleString()}</td><td>${Math.round(r.exp).toLocaleString()}</td><td>${r.one?Math.round(r.one).toLocaleString():''}</td><td>${Math.round(r.interest).toLocaleString()}</td><td>${Math.round(r.bal).toLocaleString()}</td></tr>`).join('')}</tbody>
+    </table></div>
+  </details>`;
+}
+function setMoney(k,v){ S.money[k]=num(v); save(); render(); }
+function editFlow(kind,id){
+  const list=S.money[kind], isNew=!id, a0=Math.max(0,nowAge()), p=P();
+  const it = id ? list.find(x=>x.id===id) : {id:uid(), name:'', amount:'', from:a0, to: kind==='incomes' ? Math.max(a0,p.retireAge-1) : p.lifespan};
+  if(!it) return;
+  const label = kind==='incomes' ? '毎年の収入' : '毎年の支出';
+  openSheet(`${label}を${isNew?'追加':'編集'}`, `
+    <label class="f" for="f_name">名前</label>
+    <input type="text" id="f_name" value="${h(it.name)}" placeholder="${kind==='incomes'?'例：給与、年金、副業':'例：生活費、住宅ローン、教育費'}">
+    <label class="f" for="f_amt">1年あたりの金額（万円）</label>
+    <input type="number" inputmode="decimal" id="f_amt" value="${h(it.amount)}">
+    <div class="two">
+      <div><label class="f" for="f_from">何歳から</label><input type="number" inputmode="numeric" id="f_from" value="${it.from}"></div>
+      <div><label class="f" for="f_to">何歳まで</label><input type="number" inputmode="numeric" id="f_to" value="${it.to}"></div>
+    </div>`,
+  () => {
+    const n=$('#f_name').value.trim(), amt=num($('#f_amt').value,NaN), f=Math.round(num($('#f_from').value,NaN)), t=Math.round(num($('#f_to').value,NaN));
+    if(!n) return '名前を入力してください';
+    if(!(amt>=0)) return '金額を入力してください';
+    if(!isFinite(f)||!isFinite(t)||f>t) return '「何歳から」は「何歳まで」以下にしてください';
+    Object.assign(it,{name:n,amount:amt,from:f,to:t});
+    if(isNew) list.push(it);
+    toast(`${label}を保存しました`);
+  }, isNew ? null : () => { S.money[kind]=list.filter(x=>x.id!==id); toast('削除しました'); });
+}
+
+/* ---------- goals ---------- */
+function vGoals(){
+  const a0=nowAge();
+  const gs=S.goals.slice().sort((a,b)=>(a.done-b.done)||(a.age-b.age));
+  let out=`<div class="bar"><h1>目標</h1><button class="btn small" onclick="editGoal()">＋ 目標</button></div>
+    <p class="lead">やりたいことを年齢と結びつけて、小さな一歩に分けておきます。</p>`;
+  if(!gs.length) return out + `<div class="empty-note" style="margin-top:16px">まだ目標がありません。<br>「いつか」を「何歳で」に置きかえてみましょう。<br><button class="btn" onclick="editGoal()">最初の目標を書く</button></div>`;
+  out += `<div class="goals" style="margin-top:16px">`;
+  gs.forEach(g=>{
+    const c=CATS[g.cat]||CATS.other, sd=g.steps.filter(s=>s.done).length, left=g.age-a0;
+    out += `<article class="goal-card ${g.done?'done':''}">
+      <div class="gh">
+        <button class="check" onclick="toggleGoal('${g.id}')" aria-label="${g.done?'未達成に戻す':'達成にする'}" aria-pressed="${!!g.done}">✓</button>
+        <div><h3>${h(g.title)}</h3><p class="gmeta">${g.age}歳まで（${g.done?'達成済み':left>0?'あと'+left+'年':left===0?'今年':left*-1+'年前'}）　${c.l}${num(g.cost)>0?`　必要資金 ${fm(num(g.cost))}`:''}</p></div>
+        <button class="edit" onclick="editGoal('${g.id}')">編集</button>
+      </div>
+      ${g.why?`<p class="why">${h(g.why)}</p>`:''}
+      ${g.steps.length?`<div class="progress" style="margin-top:12px"><div style="width:${sd/g.steps.length*100}%"></div></div><p class="muted" style="font-size:.78rem;margin-top:2px">ステップ ${sd} / ${g.steps.length}</p>`:''}
+      <ul class="steps">${g.steps.map(s=>`<li><label><input type="checkbox" ${s.done?'checked':''} onchange="toggleStep('${g.id}','${s.id}')"><span class="${s.done?'fin':''}">${h(s.text)}</span></label><button class="x" onclick="delStep('${g.id}','${s.id}')" aria-label="ステップを削除">×</button></li>`).join('')}</ul>
+      ${g.done?'':`<div class="addstep"><input type="text" id="st_${g.id}" placeholder="次の一歩を追加" onkeydown="if(event.key==='Enter'&&!event.isComposing)addStep('${g.id}')"><button class="btn ghost small" onclick="addStep('${g.id}')">追加</button></div>`}
+    </article>`;
+  });
+  return out + `</div>`;
+}
+function findGoal(id){ return S.goals.find(g=>g.id===id); }
+function toggleGoal(id){ const g=findGoal(id); if(!g) return; g.done=!g.done; save(); render(); toast(g.done?'達成おめでとうございます':'未達成に戻しました'); }
+function toggleStep(gid,sid){ const g=findGoal(gid); const s=g&&g.steps.find(x=>x.id===sid); if(!s) return; s.done=!s.done; save(); render(); }
+function delStep(gid,sid){ const g=findGoal(gid); if(!g) return; g.steps=g.steps.filter(x=>x.id!==sid); save(); render(); }
+function addStep(gid){
+  const g=findGoal(gid), el=$('#st_'+gid); if(!g||!el) return;
+  const t=el.value.trim(); if(!t){ el.focus(); return; }
+  g.steps.push({id:uid(),text:t,done:false}); save(); render();
+  const n=$('#st_'+gid); if(n) n.focus();
+}
+function editGoal(id){
+  const isNew=!id, a0=Math.max(0,nowAge());
+  const g = id ? findGoal(id) : {id:uid(), title:'', age:a0+5, cat:'play', cost:'', why:'', done:false, steps:[]};
+  if(!g) return;
+  openSheet(isNew?'目標を追加':'目標を編集', `
+    <label class="f" for="f_title">やりたいこと</label>
+    <input type="text" id="f_title" value="${h(g.title)}" placeholder="例：フルマラソンを走る、店を開く">
+    <div class="two">
+      <div><label class="f" for="f_age">何歳までに</label><input type="number" inputmode="numeric" id="f_age" value="${g.age}" oninput="$('#f_yr').textContent=(P().birthYear+Math.round(num(this.value)))+'年'"><p class="hint" id="f_yr">${yOf(g.age)}年</p></div>
+      <div><label class="f" for="f_cat">分類</label><select id="f_cat">${catOptions(g.cat)}</select></div>
+    </div>
+    <label class="f" for="f_cost">必要なお金（万円・任意）</label>
+    <input type="number" inputmode="decimal" id="f_cost" value="${h(g.cost)}" placeholder="入れると、その年の支出として計算します">
+    <label class="f" for="f_why">なぜやりたいか</label>
+    <textarea id="f_why" placeholder="迷ったときに読み返す一言">${h(g.why)}</textarea>`,
+  () => {
+    const t=$('#f_title').value.trim(), a=Math.round(num($('#f_age').value,NaN));
+    if(!t) return 'やりたいことを入力してください';
+    if(!isFinite(a)||a<0||a>P().lifespan) return `年齢は 0〜${P().lifespan} で入力してください`;
+    Object.assign(g,{title:t, age:a, cat:$('#f_cat').value, cost:num($('#f_cost').value)||'', why:$('#f_why').value});
+    if(isNew) S.goals.push(g);
+    toast(isNew?'目標を追加しました':'目標を保存しました');
+  }, isNew ? null : () => { S.goals=S.goals.filter(x=>x.id!==id); toast('目標を削除しました'); });
+}
+
+/* ---------- settings ---------- */
+function vSettings(){
+  const p=P();
+  return `<h1>設定</h1>
+  <h2>わたしのこと</h2>
+  <div class="panel">
+    <label class="f" for="s_name">名前</label>
+    <input type="text" id="s_name" value="${h(p.name)}" onchange="setProf('name',this.value)">
+    <div class="two">
+      <div><label class="f" for="s_by">生まれた年</label><input type="number" inputmode="numeric" id="s_by" value="${p.birthYear}" onchange="setProf('birthYear',this.value)"></div>
+      <div><label class="f" for="s_ret">退職予定の年齢</label><input type="number" inputmode="numeric" id="s_ret" value="${p.retireAge}" onchange="setProf('retireAge',this.value)"></div>
+    </div>
+    <label class="f" for="s_life">何歳までの設計図にするか</label>
+    <input type="number" inputmode="numeric" id="s_life" value="${p.lifespan}" onchange="setProf('lifespan',this.value)">
+  </div>
+  <h2>家族</h2>
+  <div class="panel">
+    <p class="muted">登録すると、年表の家族一覧表に列が増えます。進学や還暦などの定番イベントもまとめて追加できます。</p>
+    ${p.family.length?`<ul class="flows">${p.family.map(f=>`<li><button onclick="editFamily('${f.id}')"><span class="nm">${h(f.name)}<small>${f.birthYear}年生まれ　イベント${S.events.filter(e=>e.who===f.id).length}件</small></span><span class="val">いま${Y-f.birthYear}歳</span></button></li>`).join('')}</ul>`:''}
+    <button class="btn ghost small" style="margin-top:8px" onclick="editFamily()">＋ 家族を追加</button>
+  </div>
+  <h2>データ</h2>
+  <div class="panel">
+    <p class="muted">データはこのブラウザの中だけに保存されています。機種変更やブラウザのデータ削除の前に、書き出しておいてください。</p>
+    <div class="row" style="margin-top:12px">
+      <button class="btn ghost small" onclick="exportJSON()">ファイルに書き出す</button>
+      <button class="btn ghost small" onclick="copyJSON()">データをコピー</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <label class="btn ghost small" style="display:inline-flex;align-items:center">ファイルから読み込む<input type="file" accept="application/json,.json" hidden onchange="importFile(this)"></label>
+      <button class="btn ghost small" onclick="importPaste()">貼り付けて読み込む</button>
+    </div>
+    <div style="margin-top:22px;padding-top:14px;border-top:1px dashed var(--line)">
+      <button class="btn danger small" onclick="clearAll()">すべてのデータを消す</button>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:18px;text-align:center">お金の計算は目安です。実際の制度や税金は反映していません。</p>`;
+}
+function setProf(k,v){
+  const p=P();
+  if(k==='name'){ p.name=v.trim(); save(); toast('保存しました'); return; }
+  const n=Math.round(num(v,NaN));
+  if(k==='birthYear' && !(n>1900&&n<=Y)){ toast('生まれた年を西暦4桁で入力してください'); render(); return; }
+  if(k==='lifespan' && !(n>Y-p.birthYear && n<=120)){ toast(`${Y-p.birthYear+1}〜120 の範囲で入力してください`); render(); return; }
+  if(k==='retireAge' && !(n>0&&n<=120)){ toast('退職予定の年齢を入力してください'); render(); return; }
+  p[k]=n; save(); render(); toast('保存しました');
+}
+const PRESETS = [
+  {l:'小学校入学', n:7,  e:6,  cat:'learn', mo:4},
+  {l:'中学校入学', n:13, e:12, cat:'learn', mo:4},
+  {l:'高校入学',   n:16, e:15, cat:'learn', mo:4},
+  {l:'大学入学',   n:19, e:18, cat:'learn', mo:4},
+  {l:'就職',       n:23, e:22, cat:'work', mo:4},
+  {l:'還暦',       n:60, e:60, cat:'family'},
+  {l:'古希',       n:70, e:70, cat:'family'},
+  {l:'喜寿',       n:77, e:77, cat:'family'},
+  {l:'米寿',       n:88, e:88, cat:'family'}
+];
+let presetRows = [];
+function renderPresets(fid){
+  const box=$('#f_presets'); if(!box) return;
+  const by=Math.round(num($('#f_by').value,NaN)), bm=Math.round(num($('#f_bm').value,0));
+  if(!(by>1900&&by<=Y+30)){ box.innerHTML='<p class="muted">生まれた年を入れると、候補が表示されます。</p>'; presetRows=[]; return; }
+  const early = bm>=1 && bm<=3, end=yOf(P().lifespan);
+  const have = new Set(S.events.filter(e=>e.who===fid).map(e=>e.title));
+  presetRows = PRESETS.map(x=>({...x, year: by + (early?x.e:x.n), month: x.mo || (bm>=1&&bm<=12?bm:'')})).filter(x=>x.year>=Y && x.year<=end && !have.has(x.l));
+  if(!presetRows.length){ box.innerHTML='<p class="muted">追加できる候補はありません。</p>'; return; }
+  box.innerHTML = `<ul class="presets">${presetRows.map((x,i)=>`<li><label><input type="checkbox" id="pr_${i}">${x.l}<small>${x.year}年${x.month?x.month+'月':''}</small></label><input type="number" inputmode="decimal" id="pa_${i}" placeholder="必要資金 万円" aria-label="${x.l}の必要資金（万円）"></li>`).join('')}</ul>
+    ${bm?'':'<p class="muted" style="margin-top:6px">入学の年は4〜12月生まれとして計算しています。1〜3月生まれの場合は生まれ月を入れてください。</p>'}`;
+}
+function editFamily(id){
+  const isNew=!id, f = id ? P().family.find(x=>x.id===id) : {id:uid(), name:'', birthYear:'', birthMonth:''};
+  if(!f) return;
+  const cnt = S.events.filter(e=>e.who===f.id).length;
+  openSheet(isNew?'家族を追加':'家族を編集', `
+    <label class="f" for="f_name">呼び方</label>
+    <input type="text" id="f_name" value="${h(f.name)}" placeholder="例：パートナー、長男、母">
+    <div class="two">
+      <div><label class="f" for="f_by">生まれた年（西暦）</label><input type="number" inputmode="numeric" id="f_by" value="${h(f.birthYear)}" oninput="renderPresets('${f.id}')"></div>
+      <div><label class="f" for="f_bm">生まれ月（任意）</label><select id="f_bm" onchange="renderPresets('${f.id}')"><option value="">―</option>${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${num(f.birthMonth)===i+1?'selected':''}>${i+1}月</option>`).join('')}</select></div>
+    </div>
+    <label class="f">定番のライフイベントをまとめて追加</label>
+    <div id="f_presets"></div>`,
+  () => {
+    const n=$('#f_name').value.trim(), by=Math.round(num($('#f_by').value,NaN)), bm=$('#f_bm').value;
+    if(!n) return '呼び方を入力してください';
+    if(!(by>1900&&by<=Y+30)) return '生まれた年を西暦4桁で入力してください';
+    Object.assign(f,{name:n,birthYear:by,birthMonth:bm?+bm:''});
+    if(isNew) P().family.push(f);
+    let added=0;
+    presetRows.forEach((x,i)=>{
+      const cb=$('#pr_'+i); if(!cb||!cb.checked) return;
+      const amt=num($('#pa_'+i).value);
+      S.events.push({id:uid(), who:f.id, year:x.year, month:x.month, title:x.l, cat:x.cat, dir:amt>0?'out':'', amt:amt>0?amt:'', memo:''});
+      added++;
+    });
+    toast(added?`家族を保存し、イベントを${added}件追加しました`:'家族を保存しました');
+  }, isNew ? null : () => { P().family=P().family.filter(x=>x.id!==id); S.events=S.events.filter(e=>e.who!==id); toast('削除しました'); },
+  cnt ? `${f.name}さんと、そのイベント${cnt}件を削除します。よろしいですか？` : null);
+  renderPresets(f.id);
+}
+function exportJSON(){
+  try{
+    const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(b);
+    a.download=`jinsei-sekkeizu-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  }catch(e){ toast('書き出せませんでした。「データをコピー」を使ってください'); }
+}
+function copyJSON(){
+  if(!navigator.clipboard){ toast('この環境ではコピーできません'); return; }
+  navigator.clipboard.writeText(JSON.stringify(S)).then(()=>toast('データをコピーしました'),()=>toast('コピーできませんでした'));
+}
+function applyImport(text){
+  let d; try{ d=JSON.parse(text); }catch(e){ return 'データの形式が正しくありません'; }
+  if(!d || !d.profile || !d.profile.birthYear) return '人生設計図のデータではないようです';
+  if(S && !confirm('いまのデータを読み込んだデータで置きかえます。よろしいですか？')) return '';
+  S=normalize(d); save(); tab='home'; render(); toast('データを読み込みました'); return null;
+}
+function importFile(inp){
+  const f=inp.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ const e=applyImport(r.result); if(e) toast(e); };
+  r.readAsText(f); inp.value='';
+}
+function importPaste(){
+  openSheet('貼り付けて読み込む', `<label class="f" for="f_json">コピーしたデータ</label><textarea id="f_json" style="min-height:160px" placeholder="ここに貼り付け"></textarea>`,
+    () => { const e=applyImport($('#f_json').value.trim()); if(e===null) return; return e || 'KEEP'; }, null);
+}
+function clearAll(){
+  if(!confirm('すべてのデータを消します。元に戻せません。よろしいですか？')) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  S=null; tab='home'; render(); window.scrollTo(0,0);
+}
+
+/* ---------- sheet ---------- */
+let sheetSave=null, sheetDel=null, sheetDelMsg=null, lastFocus=null;
+function openSheet(title, body, onSave, onDel, delMsg){
+  sheetDelMsg=delMsg||null;
+  lastFocus=document.activeElement;
+  $('#sheetTitle').textContent=title; $('#sheetBody').innerHTML=body; $('#sheetErr').textContent='';
+  sheetSave=onSave; sheetDel=onDel; $('#sheetDel').hidden=!onDel; $('#sheet').hidden=false;
+  document.body.style.overflow='hidden';
+}
+function closeSheet(){
+  $('#sheet').hidden=true; document.body.style.overflow='';
+  if(lastFocus && document.contains(lastFocus)) lastFocus.focus();
+}
+function sheetSaveRun(){
+  if(!sheetSave) return;
+  const err=sheetSave();
+  if(err==='KEEP') return;
+  if(err){ $('#sheetErr').textContent=err; return; }
+  if(S) save(); closeSheet(); render();
+}
+function sheetDelete(){
+  if(!sheetDel || !confirm(sheetDelMsg||'削除しますか？')) return;
+  sheetDel(); save(); closeSheet(); render();
+}
+$('#sheet').addEventListener('click', e => { if(e.target.id==='sheet') closeSheet(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape' && !$('#sheet').hidden) closeSheet(); });
+
+render();
+</script>
+</body>
+</html>
