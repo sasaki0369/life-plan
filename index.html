@@ -427,7 +427,26 @@ const P = () => S.profile;
 const nowAge = () => Y - P().birthYear;
 const yOf = a => P().birthYear + a;
 const aOf = y => y - P().birthYear;
-const people = () => [{id:'me', name:P().name||'わたし', birthYear:P().birthYear}, ...P().family];
+const people = () => [{id:'me', name:P().name||'わたし', birthYear:P().birthYear, birthDate:P().birthDate}, ...P().family];
+const TD = new Date().getDate();
+function parseDate(v){ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||''); if(!m) return null; const y=+m[1],mo=+m[2],d=+m[3]; return (y>1900&&mo>=1&&mo<=12&&d>=1&&d<=31)?{y,m:mo,d}:null; }
+function bparts(pr){ const d=parseDate(pr&&pr.birthDate); if(d) return d; return {y:num(pr&&pr.birthYear), m:num(pr&&pr.birthMonth)||0, d:0}; }
+// 実年齢：yr年 mo月（dd日）時点の満年齢。月がなければ暦年の差
+function realAge(pr, yr, mo, dd){
+  const b=bparts(pr); let a=yr-b.y;
+  if(!b.m || !mo) return a;
+  if(mo<b.m) a--;
+  else if(mo===b.m && dd && b.d && dd<b.d) a--;
+  return a;
+}
+const rowAge = (pr, yr) => realAge(pr, yr, M, TD);         // その年の「今日と同じ日」の年齢
+const meP = () => people()[0];
+const realNow = () => rowAge(meP(), Y);
+const evAge = (pr, e) => realAge(pr, e.year, num(e.month)||0, 0);
+function famAge(pr, yr){ const b=bparts(pr); if(yr<b.y) return null; if(yr===b.y) return 0; return Math.max(0,rowAge(pr,yr)); }
+const fmtBirth = pr => { const d=parseDate(pr.birthDate); return d ? `${d.y}年${d.m}月${d.d}日生まれ` : `${pr.birthYear}年生まれ`; };
+// 「その人が age 歳の mo 月」が何年か
+function yearFor(pr, age, mo){ const b=bparts(pr); return b.y + age + (mo && b.m && mo<b.m ? 1 : 0); }
 const personOf = id => people().find(m=>m.id===id) || people()[0];
 const whoTag = e => (e.who && e.who!=='me') ? `<span class="who">${h(personOf(e.who).name)}</span>` : '';
 
@@ -506,7 +525,7 @@ function vWelcome(){
       <label class="f" for="w_name">名前（空欄でもOK）</label>
       <input type="text" id="w_name" placeholder="例：佐々木">
       <div class="two">
-        <div><label class="f" for="w_by">生まれた年（西暦）</label><input type="number" inputmode="numeric" id="w_by" value="${Y-40}"></div>
+        <div><label class="f" for="w_bd">生年月日</label><input type="date" id="w_bd" max="${Y}-12-31"></div>
         <div><label class="f" for="w_ret">退職予定の年齢</label><input type="number" inputmode="numeric" id="w_ret" value="65"></div>
       </div>
       <label class="f" for="w_life">何歳までの設計図にしますか</label>
@@ -518,18 +537,18 @@ function vWelcome(){
   </section>`;
 }
 function startApp(){
-  const by = Math.round(num($('#w_by').value, NaN)), life = Math.round(num($('#w_life').value, NaN)), ret = Math.round(num($('#w_ret').value, 65));
+  const bd = parseDate($('#w_bd').value), by = bd ? bd.y : NaN, life = Math.round(num($('#w_life').value, NaN)), ret = Math.round(num($('#w_ret').value, 65));
   const err = $('#w_err');
-  if(!(by>1900 && by<=Y)) { err.textContent='生まれた年を西暦4桁で入力してください'; return; }
+  if(!(by>1900 && by<=Y)) { err.textContent='生年月日を入力してください'; return; }
   if(!(life > Y-by && life <= 120)) { err.textContent=`設計図の年齢は ${Y-by+1}〜120 の範囲で入力してください`; return; }
   S = defaults();
-  Object.assign(S.profile, {name:$('#w_name').value.trim(), birthYear:by, lifespan:life, retireAge:ret});
+  Object.assign(S.profile, {name:$('#w_name').value.trim(), birthYear:by, birthDate:$('#w_bd').value, lifespan:life, retireAge:ret});
   save(); tab='home'; render(); toast('設計図をつくりました');
 }
 function startSample(){
   S = defaults(); const by = Y-45;
-  Object.assign(S.profile, {name:'', birthYear:by, lifespan:90, retireAge:65,
-    family:[{id:'fp',name:'パートナー',birthYear:by+2,birthMonth:''},{id:'fs',name:'長男',birthYear:Y-15,birthMonth:6},{id:'fd',name:'長女',birthYear:Y-11,birthMonth:2}]});
+  Object.assign(S.profile, {name:'', birthYear:by, birthDate:`${by}-10-12`, lifespan:90, retireAge:65,
+    family:[{id:'fp',name:'パートナー',birthYear:by+2,birthMonth:7,birthDate:`${by+2}-07-03`},{id:'fs',name:'長男',birthYear:Y-15,birthMonth:6,birthDate:`${Y-15}-06-21`},{id:'fd',name:'長女',birthYear:Y-11,birthMonth:2,birthDate:`${Y-11}-02-08`}]});
   S.money = {savings:800, rate:1, incomes:[
       {id:uid(),name:'給与（手取り）',amount:620,from:45,to:64},
       {id:uid(),name:'年金（世帯）',amount:260,from:65,to:90}],
@@ -556,7 +575,7 @@ function startSample(){
 
 /* ---------- home ---------- */
 function ruler(){
-  const p=P(), L=p.lifespan, a0=nowAge(), W=1000, x0=30, x1=970, ax=150;
+  const p=P(), L=p.lifespan, a0=realNow(), W=1000, x0=30, x1=970, ax=150;
   const X = a => x0 + (x1-x0) * Math.min(Math.max(a,0),L) / L;
   let s = `<svg viewBox="0 0 ${W} 205" class="ruler" role="img" aria-label="0歳から${L}歳までの人生の物差し。いま${a0}歳">`;
   s += `<line x1="${x0}" x2="${X(a0)}" y1="${ax}" y2="${ax}" class="ax-past"/><line x1="${X(a0)}" x2="${x1}" y1="${ax}" y2="${ax}" class="ax-fut"/>`;
@@ -584,7 +603,7 @@ function ruler(){
   return s + `</svg>`;
 }
 function vHome(){
-  const p=P(), a0=nowAge(), rows=sim(), up=upcoming();
+  const p=P(), a0=realNow(), rows=sim(), up=upcoming();
   const gd=S.goals.filter(g=>g.done).length, gt=S.goals.length;
   const ret = rows.find(r=>r.a===p.retireAge);
   const last = rows[rows.length-1];
@@ -595,6 +614,7 @@ function vHome(){
   const cats = [...new Set(S.events.map(e=>e.cat))];
   let out = `<h1>${p.name?h(p.name)+'さんの':'わたしの'}人生設計図</h1>
     <p class="lead">いま${a0}歳。${p.lifespan}歳まで、あと${p.lifespan-a0}年ぶんの設計図です。</p>
+    ${p.birthDate?'':`<p class="muted" style="margin-top:6px">生年月日を登録すると、実年齢で表示されます。<button class="link" onclick="go('settings')">設定で登録する</button></p>`}
     <div class="ruler-box">${ruler()}</div>`;
   if(cats.length || gt){
     out += `<div class="legend">${cats.map(c=>`<span><i style="background:${(CATS[c]||CATS.other).c}"></i>${(CATS[c]||CATS.other).l}</span>`).join('')}${gt?'<span><i class="dia"></i>目標</span>':''}</div>`;
@@ -603,12 +623,12 @@ function vHome(){
     <div class="fact"><span class="k">次の予定</span><span class="v">${next?`${next.who&&next.who!=='me'?h(personOf(next.who).name)+'　':''}${h(next.title)}<small>${ymLabel(next)}（${next.year===Y?'今年':'あと'+(next.year-Y)+'年'}）</small>`:'<small>年表にイベントを追加しましょう</small>'}</span></div>
     <div class="fact"><span class="k">目標の達成</span><span class="v">${gt?`${gd} / ${gt}<div class="progress"><div style="width:${gt?gd/gt*100:0}%"></div></div>`:'<small>まだ目標がありません</small>'}</span></div>
     <div class="fact"><span class="k">${ret?`退職時（${p.retireAge}歳）の貯蓄`:`${p.lifespan}歳時点の貯蓄`}</span><span class="v">${hasMoney?`<span class="${(ret||last).bal<0?'warn':''}">${fm((ret||last).bal)}</span>`:'<small>お金のタブで入力できます</small>'}</span></div>
-    ${hasMoney && neg ? `<div class="fact"><span class="k warn">注意</span><span class="v warn">${neg.a}歳（${neg.yr}年）で貯蓄がマイナスになります<small>お金のタブで収支を見直せます</small></span></div>`:''}
+    ${hasMoney && neg ? `<div class="fact"><span class="k warn">注意</span><span class="v warn">${rowAge(meP(),neg.yr)}歳（${neg.yr}年）で貯蓄がマイナスになります<small>お金のタブで収支を見直せます</small></span></div>`:''}
     ${hasMoney && !neg && ret ? `<div class="fact"><span class="k">${p.lifespan}歳時点の貯蓄</span><span class="v">${fm(last.bal)}</span></div>`:''}
   </div>`;
   out += `<h2>これからの10年</h2>`;
   if(soon.length){
-    out += `<ul class="soon">${soon.map(x=>`<li><span class="yrs">${x.year===Y?'今年':x.year-Y+'年後'}<small>${aOf(x.year)}歳</small></span><button class="chip ${x.kind==='goal'?'goal':''}" style="${x.kind==='ev'?`--c:${(CATS[x.cat]||CATS.other).c}`:''}" onclick="${x.kind==='ev'?`editEvent('${x.id}')`:`go('goals')`}">${x.kind==='goal'?'<span class="cat">目標</span>':`<span class="cat">${(CATS[x.cat]||CATS.other).l}</span>${whoTag(x)}`}${monthTag(x)}${h(x.title)}</button></li>`).join('')}</ul>`;
+    out += `<ul class="soon">${soon.map(x=>`<li><span class="yrs">${x.year===Y?'今年':x.year-Y+'年後'}<small>${realAge(meP(),x.year,num(x.month)||M,x.month?0:TD)}歳</small></span><button class="chip ${x.kind==='goal'?'goal':''}" style="${x.kind==='ev'?`--c:${(CATS[x.cat]||CATS.other).c}`:''}" onclick="${x.kind==='ev'?`editEvent('${x.id}')`:`go('goals')`}">${x.kind==='goal'?'<span class="cat">目標</span>':`<span class="cat">${(CATS[x.cat]||CATS.other).l}</span>${whoTag(x)}`}${monthTag(x)}${h(x.title)}</button></li>`).join('')}</ul>`;
   } else {
     out += `<div class="empty-note">10年以内の予定はまだありません。<br>進学、住まい、仕事の節目などを置いてみましょう。<br><button class="btn" onclick="editEvent()">イベントを追加</button></div>`;
   }
@@ -635,17 +655,17 @@ function vTimeline(){
   if(mode==='family') return out + vFamilyTable();
   const past = S.events.filter(e=>e.year<Y).sort((a,b)=>a.year-b.year);
   if(past.length){
-    out += `<details><summary>これまでの出来事（${past.length}件）</summary><ul class="past">${past.map(e=>`<li><span class="muted">${aOf(e.year)}歳（${ymLabel(e)}）</span> ${chipEv(e)}</li>`).join('')}</ul></details>`;
+    out += `<details><summary>これまでの出来事（${past.length}件）</summary><ul class="past">${past.map(e=>`<li><span class="muted">${evAge(meP(),e)}歳（${ymLabel(e)}）</span> ${chipEv(e)}</li>`).join('')}</ul></details>`;
   }
   out += `<ol class="tl">`;
   let lastDec=null, noted=false;
   tlSlots().forEach(s=>{
     const {yr,a}=s, filled=s.events.length+s.goals.length>0;
-    const d0=Math.floor(a/10)*10;
+    const d0=Math.floor(rowAge(meP(),yr)/10)*10;
     if(d0!==lastDec){ out += `<li class="dec">${d0}代</li>`; lastDec=d0; }
-    const fam = (filled && s.first) ? p.family.map(f=>{const fa=yr-num(f.birthYear); return fa>=0 ? `${h(f.name)} ${fa===0?'誕生':fa+'歳'}` : '';}).filter(Boolean).join('　') : '';
+    const fam = (filled && s.first) ? p.family.map(f=>{const fa=famAge(f,yr); return fa!==null ? `${h(f.name)} ${yr===bparts(f).y?'誕生':fa+'歳'}` : '';}).filter(Boolean).join('　') : '';
     const ret = s.first && a===p.retireAge;
-    const when = s.q===0 ? `<b>${a}歳</b><span>${yr}年</span>` : `${s.first?`<b>${a}歳</b><span>${yr}年</span>`:''}<em>${qLabel(s.q)}</em>`;
+    const when = `<b>${rowAge(meP(),yr)}歳</b><span>${yr}年</span>`;
     out += `<li class="yr ${s.q!==0?'q':''} ${filled?'':'empty'} ${s.now?'now':''} ${ret?'ret':''} ${s.first&&s.q!==0?'ystart':''} ${s.past?'past':''}">
       <div class="when">${when}</div>
       <div class="what">${fam?`<div class="fam">${fam}</div>`:''}${ret?'<span class="muted">退職予定</span>':''}${s.events.map(chipEv).join('')}${s.goals.map(chipGoal).join('')}<button class="add" onclick="editEvent(null,${yr},'me',${qMonth(s.q)})" aria-label="${yr}年${qLabel(s.q)}にイベントを追加">＋</button></div>
@@ -680,11 +700,11 @@ function vFamilyTable(){
     out += `<div class="empty-note" style="margin-top:12px">家族を登録すると、ここに列が増えます。<br><button class="btn" onclick="editFamily()">家族を追加</button></div>`;
   }
   const cols = ppl.length + 2;
-  out += `<div class="ftable-box"><table class="ft"><thead><tr><th class="stick">年</th>${ppl.map(m=>`<th>${h(m.name)}<small>${m.birthYear}年生まれ</small></th>`).join('')}<th>必要資金<small>その年の出入り</small></th></tr></thead><tbody>`;
+  out += `<div class="ftable-box"><table class="ft"><thead><tr><th class="stick">年</th>${ppl.map(m=>`<th>${h(m.name)}<small>${fmtBirth(m)}</small></th>`).join('')}<th>必要資金<small>その年の出入り</small></th></tr></thead><tbody>`;
   let lastDec = null, noted = false;
   tlSlots().forEach(s=>{
     const {yr,a}=s, filled=s.events.length+s.goals.length>0;
-    const d0=Math.floor(a/10)*10;
+    const d0=Math.floor(rowAge(meP(),yr)/10)*10;
     if(d0!==lastDec){ out += `<tr class="decrow"><td colspan="${cols}">わたし ${d0}代</td></tr>`; lastDec=d0; }
     let need=0, inc=0;
     s.events.forEach(e=>{ if(e.amt){ if(e.dir==='in') inc+=num(e.amt); else need+=num(e.amt); } });
@@ -692,10 +712,10 @@ function vFamilyTable(){
     const head = s.q===0 ? `<b>${yr}</b>` : `${s.first?`<b>${yr}</b>`:''}<span class="ql">${qLabel(s.q)}</span>`;
     out += `<tr class="${s.now?'now':''} ${filled?'':'empty'} ${s.first&&s.q!==0?'ystart':''} ${s.past?'past':''}"><th class="stick" scope="row">${head}</th>`;
     ppl.forEach(m=>{
-      const age=yr-num(m.birthYear);
+      const fa=famAge(m,yr), age = fa===null ? -1 : fa, born = yr===bparts(m).y;
       const mine=s.events.filter(e=>(e.who||'me')===m.id);
       const chips=mine.map(chipEvT).join('') + (m.id==='me'?s.goals.map(chipGoal).join(''):'');
-      const ageTxt = (age<0 || !s.first) ? '' : `<span class="fa${age===0?' born':''}">${age===0?'誕生':age+'歳'}</span>`;
+      const ageTxt = (age<0 || !s.first) ? '' : `<span class="fa${born?' born':''}">${born?'誕生':age+'歳'}</span>`;
       out += `<td>${ageTxt}${chips}${age>=0?`<button class="cadd" onclick="editEvent(null,${yr},'${m.id}',${qMonth(s.q)})" aria-label="${h(m.name)}の${yr}年${qLabel(s.q)}にイベントを追加">＋</button>`:''}</td>`;
     });
     out += `<td class="need">${need?`<span class="amt out">−${fm(need)}</span>`:''}${inc?`<br><span class="amt in">+${fm(inc)}</span>`:''}</td></tr>`;
@@ -714,12 +734,12 @@ function evSync(){
   const m=personOf($('#f_who').value), age=Math.round(num($('#f_age').value,NaN));
   $('#f_agel').textContent = `${m.id==='me'?'わたし':m.name}の年齢`;
   if(!isFinite(age)){ $('#f_yr').textContent=''; return; }
-  const yr=num(m.birthYear)+age, mo=$('#f_mo').value, ym=`${yr}年${mo?mo+'月':''}`;
-  $('#f_yr').textContent = m.id==='me' ? ym : `${ym}（わたし ${aOf(yr)}歳）`;
+  const mo=num($('#f_mo').value)||0, yr=yearFor(m, age, mo), ym=`${yr}年${mo?mo+'月':''}`;
+  $('#f_yr').textContent = m.id==='me' ? ym : `${ym}（わたし ${realAge(meP(), yr, mo, 0)}歳）`;
 }
 function evWhoChange(sel){
   const prev=personOf(sel.dataset.prev), age=num($('#f_age').value,NaN);
-  if(isFinite(age)){ const yr=num(prev.birthYear)+Math.round(age); $('#f_age').value = yr-num(personOf(sel.value).birthYear); }
+  if(isFinite(age)){ const mo=num($('#f_mo').value)||0, yr=yearFor(prev, Math.round(age), mo); $('#f_age').value = realAge(personOf(sel.value), yr, mo, 0); }
   sel.dataset.prev=sel.value; evSync();
 }
 function editEvent(id, year, who, month){
@@ -735,7 +755,7 @@ function editEvent(id, year, who, month){
       <div><label class="f" for="f_cat">分類</label><select id="f_cat">${catOptions(e.cat)}</select></div>
     </div>
     <div class="two">
-      <div><label class="f" for="f_age" id="f_agel"></label><input type="number" inputmode="numeric" id="f_age" value="${e.year-num(m.birthYear)}" oninput="evSync()"></div>
+      <div><label class="f" for="f_age" id="f_agel"></label><input type="number" inputmode="numeric" id="f_age" value="${evAge(m,e)}" oninput="evSync()"></div>
       <div><label class="f" for="f_mo">月（任意）</label><select id="f_mo" onchange="evSync()"><option value="">―</option>${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${num(e.month)===i+1?'selected':''}>${i+1}月</option>`).join('')}</select></div>
     </div>
     <p class="hint" id="f_yr"></p>
@@ -749,7 +769,7 @@ function editEvent(id, year, who, month){
     const t=$('#f_title').value.trim(), who=$('#f_who').value, pm=personOf(who), a=Math.round(num($('#f_age').value,NaN));
     if(!t) return 'できごとを入力してください';
     if(!isFinite(a) || a<0) return '年齢を0以上で入力してください';
-    const yr=num(pm.birthYear)+a;
+    const yr=yearFor(pm, a, num($('#f_mo').value)||0);
     if(yr>yOf(P().lifespan)) return `設計図の期間（${yOf(P().lifespan)}年まで）を超えています`;
     const dir=$('#f_dir').value, amt=num($('#f_amt').value);
     if(dir && !(amt>0)) return '金額を入力するか、お金の動きを「なし」にしてください';
@@ -773,7 +793,7 @@ function chart(rows){
   const area=`${line}L${X(rows.length-1).toFixed(1)},${y0.toFixed(1)}L${X(0).toFixed(1)},${y0.toFixed(1)}Z`;
   let g='';
   for(let k=0; mn+k*st<=mx+1e-9; k++){ const t=mn+k*st, y=Yv(t); g+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" class="gl${t===0?' zero':''}"/><text x="${pl-8}" y="${y+6}" class="yl">${fmShort(t)}</text>`; }
-  rows.forEach((r,i)=>{ if(r.a%10===0) g+=`<text x="${X(i)}" y="${H-12}" class="xl">${r.a}歳</text>`; });
+  rows.forEach((r,i)=>{ const ra=rowAge(meP(),r.yr); if(ra%10===0) g+=`<text x="${X(i)}" y="${H-12}" class="xl">${ra}歳</text>`; });
   const ri=rows.findIndex(r=>r.a===P().retireAge);
   if(ri>=0) g+=`<line x1="${X(ri)}" x2="${X(ri)}" y1="${pt}" y2="${H-pb}" class="rt"/><text x="${X(ri)+6}" y="${pt+14}" class="rtl">退職</text>`;
   return `<svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="年齢ごとの貯蓄残高の推移">
@@ -790,7 +810,7 @@ function vMoney(){
   const m=S.money, p=P(), rows=sim();
   const neg=rows.find(r=>r.bal<0), last=rows[rows.length-1], ret=rows.find(r=>r.a===p.retireAge);
   const minR=rows.reduce((a,r)=>r.bal<a.bal?r:a, rows[0]||{bal:0,a:0});
-  const oneOffs=[...S.events.filter(e=>e.amt&&e.year>=Y).map(e=>({a:aOf(e.year),mo:e.month,t:(e.who&&e.who!=='me'?personOf(e.who).name+'：':'')+e.title,v:(e.dir==='in'?1:-1)*num(e.amt)})),
+  const oneOffs=[...S.events.filter(e=>e.amt&&e.year>=Y).map(e=>({a:evAge(meP(),e),mo:e.month,t:(e.who&&e.who!=='me'?personOf(e.who).name+'：':'')+e.title,v:(e.dir==='in'?1:-1)*num(e.amt)})),
                  ...S.goals.filter(g=>!g.done&&num(g.cost)>0).map(g=>({a:g.age,t:'目標：'+g.title,v:-num(g.cost)}))].sort((a,b)=>a.a-b.a||(num(a.mo)||0)-(num(b.mo)||0));
   return `<h1>お金</h1>
   <p class="lead">金額はすべて万円で入力します。年表と目標に入れた金額も、その年の出入りとして計算に入ります。</p>
@@ -804,8 +824,8 @@ function vMoney(){
     <div class="facts" style="margin:8px -16px -16px">
       ${ret?`<div class="fact"><span class="k">退職時（${p.retireAge}歳）</span><span class="v ${ret.bal<0?'warn':''}">${fm(ret.bal)}</span></div>`:''}
       ${last?`<div class="fact"><span class="k">${p.lifespan}歳時点</span><span class="v ${last.bal<0?'warn':''}">${fm(last.bal)}</span></div>`:''}
-      ${minR?`<div class="fact"><span class="k">いちばん少ない時</span><span class="v ${minR.bal<0?'warn':''}">${fm(minR.bal)}<small>${minR.a}歳</small></span></div>`:''}
-      ${neg?`<div class="fact"><span class="k warn">注意</span><span class="v warn">${neg.a}歳でマイナスになります</span></div>`:''}
+      ${minR?`<div class="fact"><span class="k">いちばん少ない時</span><span class="v ${minR.bal<0?'warn':''}">${fm(minR.bal)}<small>${rowAge(meP(),minR.yr)}歳</small></span></div>`:''}
+      ${neg?`<div class="fact"><span class="k warn">注意</span><span class="v warn">${rowAge(meP(),neg.yr)}歳でマイナスになります</span></div>`:''}
     </div>
   </div>
   <h2>毎年の収入</h2><div class="panel">${flowList('incomes')}<button class="btn ghost small" style="margin-top:8px" onclick="editFlow('incomes')">＋ 収入を追加</button></div>
@@ -817,7 +837,7 @@ function vMoney(){
   <details style="margin-top:18px"><summary>年ごとの表を見る</summary>
     <div class="panel scroll" style="padding:8px;max-height:60vh"><table>
       <thead><tr><th>年齢</th><th>西暦</th><th>収入</th><th>支出</th><th>一時</th><th>運用</th><th>残高</th></tr></thead>
-      <tbody>${rows.map(r=>`<tr class="${r.bal<0?'neg':''}"><td>${r.a}歳</td><td>${r.yr}</td><td>${Math.round(r.inc).toLocaleString()}</td><td>${Math.round(r.exp).toLocaleString()}</td><td>${r.one?Math.round(r.one).toLocaleString():''}</td><td>${Math.round(r.interest).toLocaleString()}</td><td>${Math.round(r.bal).toLocaleString()}</td></tr>`).join('')}</tbody>
+      <tbody>${rows.map(r=>`<tr class="${r.bal<0?'neg':''}"><td>${rowAge(meP(),r.yr)}歳</td><td>${r.yr}</td><td>${Math.round(r.inc).toLocaleString()}</td><td>${Math.round(r.exp).toLocaleString()}</td><td>${r.one?Math.round(r.one).toLocaleString():''}</td><td>${Math.round(r.interest).toLocaleString()}</td><td>${Math.round(r.bal).toLocaleString()}</td></tr>`).join('')}</tbody>
     </table></div>
   </details>`;
 }
@@ -915,7 +935,7 @@ function vSettings(){
     <label class="f" for="s_name">名前</label>
     <input type="text" id="s_name" value="${h(p.name)}" onchange="setProf('name',this.value)">
     <div class="two">
-      <div><label class="f" for="s_by">生まれた年</label><input type="number" inputmode="numeric" id="s_by" value="${p.birthYear}" onchange="setProf('birthYear',this.value)"></div>
+      <div><label class="f" for="s_bd">生年月日</label><input type="date" id="s_bd" value="${h(p.birthDate||'')}" max="${Y}-12-31" onchange="setProf('birthDate',this.value)">${p.birthDate?`<p class="hint">いま ${realNow()}歳</p>`:'<p class="hint">登録すると実年齢で表示します</p>'}</div>
       <div><label class="f" for="s_ret">退職予定の年齢</label><input type="number" inputmode="numeric" id="s_ret" value="${p.retireAge}" onchange="setProf('retireAge',this.value)"></div>
     </div>
     <label class="f" for="s_life">何歳までの設計図にするか</label>
@@ -924,7 +944,7 @@ function vSettings(){
   <h2>家族</h2>
   <div class="panel">
     <p class="muted">登録すると、年表の家族一覧表に列が増えます。進学や還暦などの定番イベントもまとめて追加できます。</p>
-    ${p.family.length?`<ul class="flows">${p.family.map(f=>`<li><button onclick="editFamily('${f.id}')"><span class="nm">${h(f.name)}<small>${f.birthYear}年生まれ　イベント${S.events.filter(e=>e.who===f.id).length}件</small></span><span class="val">いま${Y-f.birthYear}歳</span></button></li>`).join('')}</ul>`:''}
+    ${p.family.length?`<ul class="flows">${p.family.map(f=>`<li><button onclick="editFamily('${f.id}')"><span class="nm">${h(f.name)}<small>${fmtBirth(f)}　イベント${S.events.filter(e=>e.who===f.id).length}件</small></span><span class="val">いま${rowAge(f,Y)}歳</span></button></li>`).join('')}</ul>`:''}
     <button class="btn ghost small" style="margin-top:8px" onclick="editFamily()">＋ 家族を追加</button>
   </div>
   <h2>アカウント</h2>
@@ -953,6 +973,12 @@ function vSettings(){
 function setProf(k,v){
   const p=P();
   if(k==='name'){ p.name=v.trim(); save(); toast('保存しました'); return; }
+  if(k==='birthDate'){
+    const d=parseDate(v);
+    if(!d || d.y>Y){ toast('生年月日を入力してください'); render(); return; }
+    if(!(p.lifespan > Y-d.y)){ toast('設計図の年齢を見直してください'); render(); return; }
+    p.birthDate=v; p.birthYear=d.y; save(); render(); toast('保存しました'); return;
+  }
   const n=Math.round(num(v,NaN));
   if(k==='birthYear' && !(n>1900&&n<=Y)){ toast('生まれた年を西暦4桁で入力してください'); render(); return; }
   if(k==='lifespan' && !(n>Y-p.birthYear && n<=120)){ toast(`${Y-p.birthYear+1}〜120 の範囲で入力してください`); render(); return; }
@@ -973,33 +999,36 @@ const PRESETS = [
 let presetRows = [];
 function renderPresets(fid){
   const box=$('#f_presets'); if(!box) return;
-  const by=Math.round(num($('#f_by').value,NaN)), bm=Math.round(num($('#f_bm').value,0));
-  if(!(by>1900&&by<=Y+30)){ box.innerHTML='<p class="muted">生まれた年を入れると、候補が表示されます。</p>'; presetRows=[]; return; }
-  const early = bm>=1 && bm<=3, end=yOf(P().lifespan);
+  const bd=parseDate($('#f_bd').value), f=P().family.find(x=>x.id===fid);
+  const by = bd ? bd.y : (f ? num(f.birthYear) : NaN), bm = bd ? bd.m : (f ? num(f.birthMonth) : 0), bday = bd ? bd.d : 2;
+  if(!(by>1900&&by<=Y+30)){ box.innerHTML='<p class="muted">生年月日を入れると、候補が表示されます。</p>'; presetRows=[]; return; }
+  const early = (bm>=1 && bm<=3) || (bm===4 && bday===1), end=yOf(P().lifespan);
   const have = new Set(S.events.filter(e=>e.who===fid).map(e=>e.title));
   presetRows = PRESETS.map(x=>({...x, year: by + (early?x.e:x.n), month: x.mo || (bm>=1&&bm<=12?bm:'')})).filter(x=>x.year>=Y && x.year<=end && !have.has(x.l));
   if(!presetRows.length){ box.innerHTML='<p class="muted">追加できる候補はありません。</p>'; return; }
   box.innerHTML = `<ul class="presets">${presetRows.map((x,i)=>`<li><label><input type="checkbox" id="pr_${i}">${x.l}<small>${x.year}年${x.month?x.month+'月':''}</small></label><input type="number" inputmode="decimal" id="pa_${i}" placeholder="必要資金 万円" aria-label="${x.l}の必要資金（万円）"></li>`).join('')}</ul>
-    ${bm?'':'<p class="muted" style="margin-top:6px">入学の年は4〜12月生まれとして計算しています。1〜3月生まれの場合は生まれ月を入れてください。</p>'}`;
+`;
 }
 function editFamily(id){
-  const isNew=!id, f = id ? P().family.find(x=>x.id===id) : {id:uid(), name:'', birthYear:'', birthMonth:''};
+  const isNew=!id, f = id ? P().family.find(x=>x.id===id) : {id:uid(), name:'', birthYear:'', birthMonth:'', birthDate:''};
   if(!f) return;
   const cnt = S.events.filter(e=>e.who===f.id).length;
   openSheet(isNew?'家族を追加':'家族を編集', `
     <label class="f" for="f_name">呼び方</label>
     <input type="text" id="f_name" value="${h(f.name)}" placeholder="例：パートナー、長男、母">
     <div class="two">
-      <div><label class="f" for="f_by">生まれた年（西暦）</label><input type="number" inputmode="numeric" id="f_by" value="${h(f.birthYear)}" oninput="renderPresets('${f.id}')"></div>
-      <div><label class="f" for="f_bm">生まれ月（任意）</label><select id="f_bm" onchange="renderPresets('${f.id}')"><option value="">―</option>${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${num(f.birthMonth)===i+1?'selected':''}>${i+1}月</option>`).join('')}</select></div>
     </div>
+    <label class="f" for="f_bd">生年月日</label>
+    <input type="date" id="f_bd" value="${h(f.birthDate||'')}" max="${Y+30}-12-31" onchange="renderPresets('${f.id}')" oninput="renderPresets('${f.id}')">
+    ${!f.birthDate && f.birthYear ? `<p class="hint">いまは ${f.birthYear}年生まれ として登録されています</p>`:''}
     <label class="f">定番のライフイベントをまとめて追加</label>
     <div id="f_presets"></div>`,
   () => {
-    const n=$('#f_name').value.trim(), by=Math.round(num($('#f_by').value,NaN)), bm=$('#f_bm').value;
+    const n=$('#f_name').value.trim(), bdv=$('#f_bd').value, bd=parseDate(bdv);
     if(!n) return '呼び方を入力してください';
-    if(!(by>1900&&by<=Y+30)) return '生まれた年を西暦4桁で入力してください';
-    Object.assign(f,{name:n,birthYear:by,birthMonth:bm?+bm:''});
+    if(bd){ if(bd.y>Y+30) return '生年月日を確認してください'; Object.assign(f,{name:n,birthYear:bd.y,birthMonth:bd.m,birthDate:bdv}); }
+    else if(!isNew && f.birthYear){ f.name=n; }
+    else return '生年月日を入力してください';
     if(isNew) P().family.push(f);
     let added=0;
     presetRows.forEach((x,i)=>{
