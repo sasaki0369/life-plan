@@ -11,6 +11,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box}
 :root{
@@ -313,16 +316,109 @@ function normalize(d){
   o.events.forEach(e => { if(!e.who) e.who = 'me'; });
   return o;
 }
-function load(){
+/* ---------- Firebase ---------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyAxVn7JUuoBsNeSODksNYyEkd2W2E252_c",
+  authDomain: "life--log.firebaseapp.com",
+  databaseURL: "https://life--log-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "life--log",
+  storageBucket: "life--log.firebasestorage.app",
+  messagingSenderId: "790653257684",
+  appId: "1:790653257684:web:9a3a2a563ea7359d8f3841"
+};
+const ALLOWED_EMAIL = 'sasaki0369@gmail.com';
+const DB_ROOT = 'jinseiSekkeizu';   // セキュリティルールのノード名
+let fbAuth=null, fbDb=null, dataRef=null, user=null;
+let authState='loading';   // loading | out | denied | in | error
+let loaded=false, deniedEmail='', authErr='', saveTimer=null, askedMigrate=false;
+
+function loadLocal(){   // 以前の端末内データ（移行用）
   try { const r = localStorage.getItem(KEY); if(r) return normalize(JSON.parse(r)); } catch(e) {}
   return null;
 }
+function stable(v){
+  if(Array.isArray(v)) return '['+v.map(stable).join(',')+']';
+  if(v && typeof v==='object') return '{'+Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+stable(v[k])).join(',')+'}';
+  return JSON.stringify(v);
+}
 function save(){
   if(S && S.events) S.events.sort(evSort);
-  try { localStorage.setItem(KEY, JSON.stringify(S)); }
-  catch(e){ toast('保存できませんでした。ブラウザの保存領域を確認してください'); }
+  if(authState!=='in' || !fbDb) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(pushRemote, 300);
 }
-let S = load();
+function pushRemote(){
+  const data = S ? JSON.parse(JSON.stringify(S)) : null;
+  fbDb.ref(DB_ROOT).update({ data, updatedAt: firebase.database.ServerValue.TIMESTAMP })
+    .catch(e => { console.error(e); toast('クラウドに保存できませんでした。通信を確認してください'); });
+}
+function renderKeep(){   // 他端末からの更新時、入力中の欄を保つ
+  const a=document.activeElement, id=a&&a.id, val=a&&a.value;
+  let pos=null; try{ pos=a.selectionStart; }catch(e){}
+  render();
+  if(id){ const n=document.getElementById(id); if(n && n!==a && 'value' in n){ n.value=val; n.focus(); try{ if(pos!=null) n.setSelectionRange(pos,pos); }catch(e){} } }
+}
+function initFirebase(){
+  try{
+    firebase.initializeApp(firebaseConfig);
+    fbAuth = firebase.auth(); fbDb = firebase.database();
+  }catch(e){ authState='error'; authErr='Firebaseを読み込めませんでした。通信を確認して再読み込みしてください。'; render(); return; }
+  fbAuth.getRedirectResult().catch(e => { authErr = loginErrText(e); render(); });
+  fbAuth.onAuthStateChanged(u => {
+    if(dataRef){ dataRef.off(); dataRef=null; }
+    user = u; loaded = false;
+    if(!u){ authState = deniedEmail ? 'denied' : 'out'; S=null; render(); return; }
+    if((u.email||'').toLowerCase() !== ALLOWED_EMAIL){ deniedEmail = u.email || '不明なアカウント'; fbAuth.signOut(); return; }
+    deniedEmail=''; authErr=''; authState='in'; render();
+    dataRef = fbDb.ref(DB_ROOT + '/data');
+    dataRef.on('value', snap => {
+      const v = snap.val();
+      if(v){
+        const n = normalize(v);
+        const changed = !loaded || stable(n) !== stable(S);
+        S = n; loaded = true;
+        if(changed) renderKeep();
+        return;
+      }
+      loaded = true;
+      const local = loadLocal();
+      if(local && !askedMigrate){
+        askedMigrate = true;
+        if(confirm('この端末に以前のデータがあります。クラウドに移しますか？')){
+          S = local; save(); try{ localStorage.removeItem(KEY); }catch(e){}
+          render(); toast('データをクラウドに移しました'); return;
+        }
+      }
+      S = null; render();
+    }, err => {
+      console.error(err); authState='error';
+      authErr='データを読み込めませんでした。Firebaseのセキュリティルールを確認してください。'; render();
+    });
+  });
+}
+function loginErrText(e){
+  const c = e && e.code || '';
+  if(c==='auth/unauthorized-domain') return 'このURLはFirebaseの承認済みドメインに登録されていません。';
+  if(c==='auth/operation-not-allowed') return 'FirebaseでGoogleログインが有効になっていません。';
+  if(c==='auth/network-request-failed') return '通信できませんでした。電波の状況を確認してください。';
+  return 'ログインできませんでした（' + (c || e.message || '不明なエラー') + '）';
+}
+function login(){
+  if(!fbAuth) return;
+  deniedEmail=''; authErr='';
+  const prov = new firebase.auth.GoogleAuthProvider();
+  prov.setCustomParameters({ login_hint: ALLOWED_EMAIL, prompt: 'select_account' });
+  fbAuth.signInWithPopup(prov).catch(e => {
+    if(e.code==='auth/popup-blocked' || e.code==='auth/operation-not-supported-in-this-environment') return fbAuth.signInWithRedirect(prov);
+    if(e.code==='auth/popup-closed-by-user' || e.code==='auth/cancelled-popup-request') return;
+    authErr = loginErrText(e); render();
+  });
+}
+function logout(){
+  if(!confirm('ログアウトしますか？')) return;
+  fbAuth.signOut(); tab='home';
+}
+let S = null;
 let tab = 'home';
 let tlOnlyFilled = false;
 let tlMode = null; // 'list' | 'family'（null は家族がいれば一覧表）
@@ -374,6 +470,7 @@ function upcoming(){
 /* ---------- render ---------- */
 function render(){
   const nav = $('#tabs');
+  if(authState!=='in' || !loaded){ nav.hidden = true; $('#view').innerHTML = vLogin(); return; }
   if(!S){ nav.hidden = true; $('#view').innerHTML = vWelcome(); return; }
   nav.hidden = false;
   nav.querySelectorAll('button').forEach(b => { if(b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
@@ -383,10 +480,28 @@ function render(){
 function go(t){ tab=t; render(); window.scrollTo(0,0); }
 $('#tabs').addEventListener('click', e => { const b=e.target.closest('button[data-tab]'); if(b) go(b.dataset.tab); });
 
+function vLogin(){
+  if(authState==='loading' || (authState==='in' && !loaded)){
+    return `<section class="welcome"><h1>人生設計図</h1><p class="lead">読み込み中…</p></section>`;
+  }
+  const msg = authState==='denied'
+    ? `${h(deniedEmail)} ではご利用いただけません。${ALLOWED_EMAIL} でログインしてください。`
+    : authErr;
+  return `<section class="welcome">
+    <h1>人生設計図</h1>
+    <p class="lead">年表・お金・目標を一枚にまとめて、これからの人生を見渡すためのノートです。データはクラウドに保存され、ログインすればどの端末からでも同じ設計図を開けます。</p>
+    <div class="panel">
+      ${authState==='error' && !fbAuth ? '' : `<button class="btn" style="width:100%" onclick="login()">Googleでログイン</button>`}
+      <p class="muted" style="margin-top:10px">利用できるのは ${ALLOWED_EMAIL} のアカウントだけです。</p>
+      ${msg?`<p class="err">${h(msg)}</p>`:''}
+      ${authState==='error' && fbAuth && user ? `<button class="link" onclick="fbAuth.signOut()">ログアウトする</button>`:''}
+    </div>
+  </section>`;
+}
 function vWelcome(){
   return `<section class="welcome">
     <h1>人生設計図</h1>
-    <p class="lead">年表・お金・目標を一枚にまとめて、これからの人生を見渡すためのノートです。データはこの端末のブラウザの中だけに保存されます。</p>
+    <p class="lead">年表・お金・目標を一枚にまとめて、これからの人生を見渡すためのノートです。データはクラウドに保存され、ログインすればどの端末からでも開けます。</p>
     <div class="panel">
       <label class="f" for="w_name">名前（空欄でもOK）</label>
       <input type="text" id="w_name" placeholder="例：佐々木">
@@ -812,9 +927,15 @@ function vSettings(){
     ${p.family.length?`<ul class="flows">${p.family.map(f=>`<li><button onclick="editFamily('${f.id}')"><span class="nm">${h(f.name)}<small>${f.birthYear}年生まれ　イベント${S.events.filter(e=>e.who===f.id).length}件</small></span><span class="val">いま${Y-f.birthYear}歳</span></button></li>`).join('')}</ul>`:''}
     <button class="btn ghost small" style="margin-top:8px" onclick="editFamily()">＋ 家族を追加</button>
   </div>
+  <h2>アカウント</h2>
+  <div class="panel">
+    <p>${h(user && user.email || '')}<span class="muted">　でログイン中</span></p>
+    <p class="muted">データはクラウド（Firebase）に保存され、同じアカウントでログインした端末どうしで自動的に同期されます。</p>
+    <button class="btn ghost small" style="margin-top:10px" onclick="logout()">ログアウト</button>
+  </div>
   <h2>データ</h2>
   <div class="panel">
-    <p class="muted">データはこのブラウザの中だけに保存されています。機種変更やブラウザのデータ削除の前に、書き出しておいてください。</p>
+    <p class="muted">念のためのバックアップとして、ファイルやテキストに書き出せます。</p>
     <div class="row" style="margin-top:12px">
       <button class="btn ghost small" onclick="exportJSON()">ファイルに書き出す</button>
       <button class="btn ghost small" onclick="copyJSON()">データをコピー</button>
@@ -922,9 +1043,9 @@ function importPaste(){
     () => { const e=applyImport($('#f_json').value.trim()); if(e===null) return; return e || 'KEEP'; }, null);
 }
 function clearAll(){
-  if(!confirm('すべてのデータを消します。元に戻せません。よろしいですか？')) return;
+  if(!confirm('クラウド上のすべてのデータを消します。ほかの端末からも消え、元に戻せません。よろしいですか？')) return;
   try{ localStorage.removeItem(KEY); }catch(e){}
-  S=null; tab='home'; render(); window.scrollTo(0,0);
+  S=null; save(); tab='home'; render(); window.scrollTo(0,0);
 }
 
 /* ---------- sheet ---------- */
@@ -958,6 +1079,7 @@ if('serviceWorker' in navigator && location.protocol==='https:' && !location.hos
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 render();
+initFirebase();
 </script>
 </body>
 </html>
