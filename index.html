@@ -205,7 +205,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
 
 /* ---- nav ---- */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--card);border-top:1px solid var(--line);
-  padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(5,1fr)}
+  padding-bottom:env(safe-area-inset-bottom,0px);display:grid;grid-template-columns:repeat(4,1fr)}
 .tabs button{background:none;border:0;padding:8px 0 10px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.72rem;color:var(--sub);min-height:56px}
 .tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tabs button[aria-current="page"]{color:var(--accent);font-weight:700}
@@ -256,6 +256,54 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
 .presets label input{width:20px;height:20px;accent-color:var(--accent);flex-shrink:0}
 .presets label small{color:var(--sub)}
 .presets input[type=number]{min-height:38px;padding:6px 8px}
+/* ---- growth ---- */
+.gear{background:none;border:0;color:var(--sub);width:44px;height:44px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.gear svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.stats>div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.stats small{display:block;color:var(--sub);font-size:.76rem;line-height:1.5}
+.stats b{display:block;font-size:1.25rem;line-height:1.4}
+.notice{background:var(--gold-soft);border:1px solid var(--gold);border-radius:12px;padding:10px 14px;margin-top:12px;font-size:.9rem}
+.notice .link{padding:4px 0;text-align:left}
+.tlist{display:flex;flex-direction:column;gap:10px}
+.tcard{display:flex;flex-direction:column;gap:2px;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:12px;padding:12px 14px;line-height:1.5}
+.tcard b{font-size:1rem}
+.tdate{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.82rem;color:var(--sub)}
+.tmeta{font-size:.82rem;color:var(--sub)}
+.tscore{font-size:.82rem;margin-top:2px}
+.star{color:var(--gold);letter-spacing:1px}
+.badge{display:inline-block;font-size:.72rem;font-weight:700;border-radius:999px;padding:1px 10px;background:var(--line);color:var(--ink);white-space:nowrap}
+.badge.plan{background:var(--accent-soft);color:var(--accent)}
+.badge.done{background:var(--green);color:#fff}
+.badge.warn{background:var(--red-soft);color:var(--red)}
+.tag{display:inline-block;font-size:.75rem;border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:1px 9px;color:var(--sub);font-weight:400}
+.tagpick{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tagpick .tag{min-height:30px;cursor:pointer}
+.chart .ma{fill:none;stroke:var(--accent);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;opacity:.18}
+.asp{display:grid;grid-template-columns:72px 1fr auto;gap:10px;align-items:center;padding:6px 0}
+.asp .al{font-size:.88rem}
+.asp .bars{display:flex;flex-direction:column;gap:3px}
+.asp .bars div{height:8px;border-radius:99px}
+.asp .b0{background:var(--line)} .asp .b1{background:var(--accent)}
+.asp .av{font-size:.82rem;white-space:nowrap}
+.asp em{font-style:normal;font-weight:700;margin-left:6px}
+.asp em.up{color:var(--green)} .asp em.down{color:var(--red)}
+.para{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}
+.para .k{font-size:.8rem;color:var(--sub);margin-bottom:2px}
+.pre{white-space:pre-wrap}
+fieldset.scale{border:0;padding:0;margin:14px 0 0}
+fieldset.scale legend{font-size:.85rem;color:var(--sub);padding:0;margin-bottom:6px}
+.scale .opts{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.scale label{position:relative}
+.scale input{position:absolute;opacity:0;width:1px;height:1px}
+.scale span{display:flex;align-items:center;justify-content:center;min-height:44px;border:1.5px solid var(--line);border-radius:10px;font-weight:700;background:var(--paper);cursor:pointer}
+.scale input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.scale input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
+.scale .ends{display:flex;justify-content:space-between;font-size:.72rem;color:var(--sub);margin-top:2px}
+.rc{background:var(--paper);border:1.5px dashed var(--line);border-radius:12px;padding:12px;margin-top:6px}
+.rc-prev{margin-bottom:10px;text-align:center}
+.rc-prev img{max-width:100%;max-height:220px;border-radius:8px;cursor:zoom-in;display:block;margin:0 auto}
+.rc-prev img.big{max-height:none;cursor:zoom-out}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -266,8 +314,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
   <button data-tab="home"><svg viewBox="0 0 24 24"><path d="M3 17h18M6 17v-3M10 17v-6M14 17v-3M18 17v-6"/></svg>設計図</button>
   <button data-tab="timeline"><svg viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>年表</button>
   <button data-tab="money"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 7l3.5 5 3.5-5M12 12v6M9 13h6M9 16h6"/></svg>お金</button>
-  <button data-tab="goals"><svg viewBox="0 0 24 24"><path d="M5 21V4h12l-2.5 4L17 12H5"/></svg>目標</button>
-  <button data-tab="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>設定</button>
+  <button data-tab="growth"><svg viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12C12 8 9 5 4 5c0 4 3 7 8 7z"/><path d="M12 14c0-4 3-7 8-7 0 4-3 7-8 7z"/></svg>成長</button>
 </nav>
 
 <div class="sheet-wrap" id="sheet" hidden>
@@ -277,7 +324,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
     <p class="err" id="sheetErr"></p>
     <div class="foot">
       <button class="btn danger small" id="sheetDel" onclick="sheetDelete()">削除</button>
-      <button class="btn" onclick="sheetSaveRun()" style="margin-left:auto">保存</button>
+      <button class="btn" id="sheetSave" onclick="sheetSaveRun()" style="margin-left:auto">保存</button>
     </div>
   </div>
 </div>
@@ -302,7 +349,8 @@ const num = (v, d=0) => { const n = parseFloat(v); return isFinite(n) ? n : d; }
 
 function defaults(){
   return { profile:{name:'',birthYear:Y-40,lifespan:90,retireAge:65,family:[]},
-           events:[], money:{savings:0,rate:1,incomes:[],expenses:[]}, goals:[] };
+           events:[], money:{savings:0,rate:1,incomes:[],expenses:[]}, goals:[],
+           growth:{talks:[], skills:[], yearTarget:'', showOnTimeline:true, toMoney:true} };
 }
 function normalize(d){
   const b = defaults();
@@ -314,6 +362,9 @@ function normalize(d){
   ['events','goals'].forEach(k => { if(!Array.isArray(o[k])) o[k] = []; });
   o.goals.forEach(g => { if(!Array.isArray(g.steps)) g.steps = []; });
   o.events.forEach(e => { if(!e.who) e.who = 'me'; });
+  o.growth = Object.assign(defaults().growth, o.growth || {});
+  ['talks','skills'].forEach(k => { if(!Array.isArray(o.growth[k])) o.growth[k] = []; });
+  o.growth.talks.forEach(t => { if(!Array.isArray(t.items)) t.items = []; if(!Array.isArray(t.tags)) t.tags = []; if(!t.sc || typeof t.sc!=='object') t.sc = {}; if(!t.status) t.status='plan'; });
   return o;
 }
 /* ---------- Firebase ---------- */
@@ -473,6 +524,7 @@ function sim(){
     m.expenses.forEach(i => { if(a>=i.from && a<=i.to) exp += num(i.amount); });
     S.events.forEach(e => { if(e.year===yr && e.amt) one += (e.dir==='in' ? 1 : -1) * num(e.amt); });
     S.goals.forEach(g => { if(!g.done && g.age===a && g.cost) one -= num(g.cost); });
+    one += talkMoneyByYear(yr);
     const interest = bal > 0 ? bal * num(m.rate)/100 : 0;
     bal = bal + interest + inc - exp + one;
     rows.push({a, yr, inc, exp, one, interest, bal});
@@ -481,7 +533,7 @@ function sim(){
 }
 function upcoming(){
   const list = [];
-  S.events.forEach(e => { if(e.year>Y || (e.year===Y && (!e.month || e.month>=M))) list.push({kind:'ev', year:e.year, month:e.month, title:e.title, cat:e.cat, id:e.id, who:e.who}); });
+  allEvents().forEach(e => { if(e.year>Y || (e.year===Y && (!e.month || e.month>=M))) list.push({kind:'ev', year:e.year, month:e.month, title:e.title, cat:e.cat, id:e.id, who:e.who}); });
   S.goals.forEach(g => { const yr=yOf(g.age); if(!g.done && yr>=Y) list.push({kind:'goal', year:yr, title:g.title, id:g.id}); });
   return list.sort(evSort);
 }
@@ -493,7 +545,8 @@ function render(){
   if(!S){ nav.hidden = true; $('#view').innerHTML = vWelcome(); return; }
   nav.hidden = false;
   nav.querySelectorAll('button').forEach(b => { if(b.dataset.tab===tab) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
-  const v = {home:vHome, timeline:vTimeline, money:vMoney, goals:vGoals, settings:vSettings}[tab];
+  if(tab==='goals'){ tab='growth'; growthSub='goals'; }
+  const v = {home:vHome, timeline:vTimeline, money:vMoney, growth:vGrowth, settings:vSettings}[tab] || vHome;
   $('#view').innerHTML = v();
 }
 function go(t){ tab=t; render(); window.scrollTo(0,0); }
@@ -564,6 +617,15 @@ function startSample(){
     ev('me',[Y+5,9],'車の買い替え','other','out',250),
     ev('me',[by+65,3],'退職金','work','in',1500),
     ev('me',by+68,'自宅リフォーム','home','out',400)];
+  const tk=(o)=>Object.assign({id:uid(), status:'done', time:'', venueType:'venue', organizer:'', format:'講演', audienceType:'自治体職員', tags:['インフラOS'], aim:'', prepPlanH:'', items:[], sc:{}, reactionMemo:'', good:'', reflect:'', next:'', leads:'', slidesUrl:'', videoUrl:'', prevDone:''}, o);
+  const dd=(y,m,d)=>`${y}-${pad2(m)}-${pad2(d)}`;
+  S.growth = {yearTarget:6, showOnTimeline:true, toMoney:true, skills:[], talks:[
+    tk({date:dd(Y-1,11,8), event:'地域インフラ維持管理セミナー', title:'光ファイバーで見守る道路と水道', place:'さいたま市', minutes:40, actualMinutes:48, audience:60, tension:5, reaction:3, selfScore:2, sc:{structure:3,speech:2,time:1,qa:2}, qaCount:2, cards:5, reflect:'スライドが多く時間を大きく超えた', next:'スライドを20枚以内にし、通しで2回練習する'}),
+    tk({date:dd(Y,2,20), event:'自治体DXフォーラム', title:'インフラOSが変える維持管理', place:'仙台市', minutes:30, actualMinutes:31, audience:120, tension:4, reaction:4, selfScore:3, sc:{structure:4,speech:3,time:4,qa:3}, qaCount:4, cards:12, prevDone:'yes', next:'冒頭で聴講者に問いかけて参加感をつくる',
+      items:[{id:uid(),kind:'fee',amount:50000,tax:5105,date:dd(Y,2,20),payee:'フォーラム実行委員会',memo:'講師謝金',receiptId:''},{id:uid(),kind:'travel',amount:22000,tax:'',date:dd(Y,2,20),payee:'JR東日本',memo:'新幹線 東京→仙台 往復',receiptId:''}]}),
+    tk({date:dd(Y,6,12), event:'建設DX研究会', title:'現場とデータをつなぐ', place:'オンライン', venueType:'online', format:'パネルディスカッション', minutes:60, actualMinutes:60, audience:200, tension:3, reaction:4, selfScore:4, sc:{structure:4,speech:4,time:5,qa:4}, qaCount:6, cards:0, prevDone:'part', next:'事例の数字を一つに絞って印象に残す'}),
+    tk({status:'plan', date:dd(Y+(M>=11?1:0),M>=11?2:12,4), event:'地域レジリエンス・シンポジウム', title:'総合地域エンジニアリング会社への道', place:'町田市', minutes:45, audience:150, aim:'自治体との共同実証の相手を見つける', prepPlanH:10})
+  ]};
   S.goals = [
     {id:uid(),title:'技術士の資格をとる',age:48,cat:'learn',cost:30,why:'現場の経験を形にしておきたい',done:false,
       steps:[{id:uid(),text:'過去問を1年分解く',done:true},{id:uid(),text:'講座に申し込む',done:false},{id:uid(),text:'論文対策',done:false}]},
@@ -609,7 +671,7 @@ function ruler(){
   }
   const stack = {};
   const slot = a => { const k=Math.round(X(a)/20); stack[k]=(stack[k]||0)+1; return Math.max(58, ax-18-(stack[k]-1)*20); };
-  S.events.slice().sort(evSort).forEach(e => {
+  allEvents().forEach(e => {
     const a=fracAge(e.year, num(e.month)||0); if(!inR(a)) return;
     s += `<circle cx="${X(a)}" cy="${slot(a)}" r="8" fill="${(CATS[e.cat]||CATS.other).c}"><title>${h(ymLabel(e)+' '+e.title)}</title></circle>`;
   });
@@ -640,8 +702,8 @@ function vHome(){
   const hasMoney = S.money.incomes.length || S.money.expenses.length || num(S.money.savings);
   const next = up[0];
   const soon = up.filter(x=>x.year<=Y+10);
-  const cats = [...new Set(S.events.map(e=>e.cat))];
-  let out = `<h1>${p.name?h(p.name)+'さんの':'わたしの'}人生設計図</h1>
+  const cats = [...new Set(allEvents().map(e=>e.cat))];
+  let out = `<div class="bar"><h1>${p.name?h(p.name)+'さんの':'わたしの'}人生設計図</h1><button class="gear" onclick="go('settings')" aria-label="設定"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div>
     <p class="lead">いま${a0}歳。${p.lifespan}歳まで、あと${p.lifespan-a0}年ぶんの設計図です。</p>
     ${p.birthDate?'':`<p class="muted" style="margin-top:6px">生年月日を登録すると、実年齢で表示されます。<button class="link" onclick="go('settings')">設定で登録する</button></p>`}
     ${rulerRange().full?'':`<p class="muted" style="margin-top:10px">${rulerRange().r0}〜${rulerRange().r1}歳を表示中　<button class="link" onclick="setRange(null)">全体を表示</button></p>`}
@@ -658,7 +720,7 @@ function vHome(){
   </div>`;
   out += `<h2>これからの10年</h2>`;
   if(soon.length){
-    out += `<ul class="soon">${soon.map(x=>`<li><span class="yrs">${x.year===Y?'今年':x.year-Y+'年後'}<small>${realAge(meP(),x.year,num(x.month)||M,x.month?0:TD)}歳</small></span><button class="chip ${x.kind==='goal'?'goal':''}" style="${x.kind==='ev'?`--c:${(CATS[x.cat]||CATS.other).c}`:''}" onclick="${x.kind==='ev'?`editEvent('${x.id}')`:`go('goals')`}">${x.kind==='goal'?'<span class="cat">目標</span>':`<span class="cat">${(CATS[x.cat]||CATS.other).l}</span>${whoTag(x)}`}${monthTag(x)}${h(x.title)}</button></li>`).join('')}</ul>`;
+    out += `<ul class="soon">${soon.map(x=>`<li><span class="yrs">${x.year===Y?'今年':x.year-Y+'年後'}<small>${realAge(meP(),x.year,num(x.month)||M,x.month?0:TD)}歳</small></span><button class="chip ${x.kind==='goal'?'goal':''}" style="${x.kind==='ev'?`--c:${(CATS[x.cat]||CATS.other).c}`:''}" onclick="${x.kind==='ev'?`editEvent('${x.id}')`:`goGrowth('goals')`}">${x.kind==='goal'?'<span class="cat">目標</span>':`<span class="cat">${(CATS[x.cat]||CATS.other).l}</span>${whoTag(x)}`}${monthTag(x)}${h(x.title)}</button></li>`).join('')}</ul>`;
   } else {
     out += `<div class="empty-note">10年以内の予定はまだありません。<br>進学、住まい、仕事の節目などを置いてみましょう。<br><button class="btn" onclick="editEvent()">イベントを追加</button></div>`;
   }
@@ -671,7 +733,7 @@ function chipEv(e){
   return `<button class="chip" style="--c:${c.c}" onclick="editEvent('${e.id}')"><span class="cat">${c.l}</span>${whoTag(e)}${monthTag(e)}${h(e.title)}${e.amt?`<span class="amt ${e.dir==='in'?'in':'out'}">${e.dir==='in'?'+':'−'}${fm(num(e.amt))}</span>`:''}</button>`;
 }
 function chipGoal(g){
-  return `<button class="chip goal ${g.done?'done':''}" onclick="go('goals')"><span class="cat">目標</span>${h(g.title)}</button>`;
+  return `<button class="chip goal ${g.done?'done':''}" onclick="goGrowth('goals')"><span class="cat">目標</span>${h(g.title)}</button>`;
 }
 function vTimeline(){
   const p=P(), a0=nowAge();
@@ -683,7 +745,7 @@ function vTimeline(){
     </div><br>
     <label class="switch"><input type="checkbox" ${tlOnlyFilled?'checked':''} onchange="tlOnlyFilled=this.checked;render()">予定のある年だけ表示</label>`;
   if(mode==='family') return out + vFamilyTable();
-  const past = S.events.filter(e=>e.year<Y).sort((a,b)=>a.year-b.year);
+  const past = allEvents().filter(e=>e.year<Y).sort((a,b)=>a.year-b.year);
   if(past.length){
     out += `<details><summary>これまでの出来事（${past.length}件）</summary><ul class="past">${past.map(e=>`<li><span class="muted">${evAge(meP(),e)}歳（${ymLabel(e)}）</span> ${chipEv(e)}</li>`).join('')}</ul></details>`;
   }
@@ -708,7 +770,7 @@ const qMonth = q => (q===0 || q==='u') ? "''" : q*3-2;
 function tlSlots(){
   const p=P(), a0=nowAge(), out=[];
   for(let a=a0; a<=p.lifespan; a++){
-    const yr=yOf(a), evs=S.events.filter(e=>e.year===yr), gs=S.goals.filter(g=>g.age===a);
+    const yr=yOf(a), evs=allEvents().filter(e=>e.year===yr), gs=S.goals.filter(g=>g.age===a);
     if(tlOnlyFilled && !(evs.length+gs.length)) continue;
     out.push({q:0, yr, a, events:evs, goals:gs, first:true, now:a===a0});
   }
@@ -718,7 +780,7 @@ function vFamilyTable(){
   const p=P(), a0=nowAge(), ppl=people();
   const future = e => e.year>=Y;
   const sums = ppl.map(m=>{
-    const evs=S.events.filter(e=>(e.who||'me')===m.id && future(e));
+    const evs=allEvents().filter(e=>(e.who||'me')===m.id && future(e));
     const need=evs.filter(e=>e.amt&&e.dir!=='in').reduce((s,e)=>s+num(e.amt),0)
       + (m.id==='me' ? S.goals.filter(g=>!g.done&&num(g.cost)>0&&yOf(g.age)>=Y).reduce((s,g)=>s+num(g.cost),0) : 0);
     return {m, n:evs.length, need};
@@ -773,6 +835,7 @@ function evWhoChange(sel){
   sel.dataset.prev=sel.value; evSync();
 }
 function editEvent(id, year, who, month){
+  if(id && String(id).startsWith('talk:')){ openTalk(String(id).slice(5)); return; }
   const isNew = !id;
   const e = id ? S.events.find(x=>x.id===id) : {id:uid(), who:who||'me', year:year||Y, month:month||'', title:'', cat:'family', dir:'', amt:'', memo:''};
   if(!e) return;
@@ -841,7 +904,8 @@ function vMoney(){
   const neg=rows.find(r=>r.bal<0), last=rows[rows.length-1], ret=rows.find(r=>r.a===p.retireAge);
   const minR=rows.reduce((a,r)=>r.bal<a.bal?r:a, rows[0]||{bal:0,a:0});
   const oneOffs=[...S.events.filter(e=>e.amt&&e.year>=Y).map(e=>({a:evAge(meP(),e),mo:e.month,t:(e.who&&e.who!=='me'?personOf(e.who).name+'：':'')+e.title,v:(e.dir==='in'?1:-1)*num(e.amt)})),
-                 ...S.goals.filter(g=>!g.done&&num(g.cost)>0).map(g=>({a:g.age,t:'目標：'+g.title,v:-num(g.cost)}))].sort((a,b)=>a.a-b.a||(num(a.mo)||0)-(num(b.mo)||0));
+                 ...S.goals.filter(g=>!g.done&&num(g.cost)>0).map(g=>({a:g.age,t:'目標：'+g.title,v:-num(g.cost)})),
+                 ...(G().toMoney ? [...new Set(G().talks.filter(t=>t.status!=='cancel').flatMap(t=>(t.items||[]).map(it=>itemYear(it,t))))].filter(yr=>yr>=Y).map(yr=>({a:rowAge(meP(),yr),t:`講演の謝礼・交通費（${yr}年）`,v:talkYenByYear(yr)/10000,y:talkYenByYear(yr),talk:true})).filter(o=>o.y) : [])].sort((a,b)=>a.a-b.a||(num(a.mo)||0)-(num(b.mo)||0));
   return `<h1>お金</h1>
   <p class="lead">金額はすべて万円で入力します。年表と目標に入れた金額も、その年の出入りとして計算に入ります。</p>
   <div class="panel" style="margin-top:14px"><div class="inline-fields">
@@ -861,7 +925,7 @@ function vMoney(){
   <h2>毎年の収入</h2><div class="panel">${flowList('incomes')}<button class="btn ghost small" style="margin-top:8px" onclick="editFlow('incomes')">＋ 収入を追加</button></div>
   <h2>毎年の支出</h2><div class="panel">${flowList('expenses')}<button class="btn ghost small" style="margin-top:8px" onclick="editFlow('expenses')">＋ 支出を追加</button></div>
   <h2>一時的な出入り</h2><div class="panel">
-    ${oneOffs.length?`<ul class="flows">${oneOffs.map(o=>`<li><button onclick="go('timeline')"><span class="nm">${h(o.t)}<small>${o.a}歳${o.mo?'　'+o.mo+'月':''}</small></span><span class="val amt ${o.v<0?'out':'in'}">${o.v<0?'−':'+'}${fm(Math.abs(o.v))}</span></button></li>`).join('')}</ul>`
+    ${oneOffs.length?`<ul class="flows">${oneOffs.map(o=>`<li><button onclick="${o.talk?"goGrowth('talks')":"go('timeline')"}"><span class="nm">${h(o.t)}<small>${o.a}歳${o.mo?'　'+o.mo+'月':''}</small></span><span class="val amt ${o.v<0?'out':'in'}">${o.v<0?'−':'+'}${o.talk?yen(Math.abs(o.y)):fm(Math.abs(o.v))}</span></button></li>`).join('')}</ul>`
       :'<p class="muted">年表のイベントや目標に金額を入れると、ここに並びます。</p>'}
   </div>
   <details style="margin-top:18px"><summary>年ごとの表を見る</summary>
@@ -901,8 +965,7 @@ function editFlow(kind,id){
 function vGoals(){
   const a0=nowAge();
   const gs=S.goals.slice().sort((a,b)=>(a.done-b.done)||(a.age-b.age));
-  let out=`<div class="bar"><h1>目標</h1><button class="btn small" onclick="editGoal()">＋ 目標</button></div>
-    <p class="lead">やりたいことを年齢と結びつけて、小さな一歩に分けておきます。</p>`;
+  let out=`<div class="bar" style="margin-top:6px"><p class="lead" style="margin:0">やりたいことを年齢と結びつけて、小さな一歩に分けておきます。</p><button class="btn small" onclick="editGoal()">＋ 目標</button></div>`;
   if(!gs.length) return out + `<div class="empty-note" style="margin-top:16px">まだ目標がありません。<br>「いつか」を「何歳で」に置きかえてみましょう。<br><button class="btn" onclick="editGoal()">最初の目標を書く</button></div>`;
   out += `<div class="goals" style="margin-top:16px">`;
   gs.forEach(g=>{
@@ -956,10 +1019,372 @@ function editGoal(id){
   }, isNew ? null : () => { S.goals=S.goals.filter(x=>x.id!==id); toast('目標を削除しました'); });
 }
 
+/* ---------- growth（成長：外部講演） ---------- */
+let growthSub='talks', talkView=null;
+const pad2 = n => String(n).padStart(2,'0');
+const todayStr = () => `${Y}-${pad2(M)}-${pad2(TD)}`;
+const G = () => S.growth;
+const TALK_FORMATS=['講演','基調講演','パネルディスカッション','ワークショップ','勉強会・LT','講義','その他'];
+const VENUE_TYPES={venue:'会場',online:'オンライン',hybrid:'ハイブリッド'};
+const TALK_STATUS={plan:'計画中',done:'実施済み',cancel:'中止'};
+const ASPECTS=[['structure','構成'],['speech','話し方'],['time','時間配分'],['qa','質疑対応']];
+const MKINDS={fee:{l:'謝礼',dir:'in'},travelIn:{l:'交通費（支給）',dir:'in'},travel:{l:'交通費（実費）',dir:'out'},lodging:{l:'宿泊費',dir:'out'},otherIn:{l:'その他の収入',dir:'in'},otherOut:{l:'その他の支出',dir:'out'}};
+const yen = v => (v<0?'−':'') + Math.abs(Math.round(v)).toLocaleString('ja-JP') + '円';
+const numOr = v => { const n=parseFloat(v); return isFinite(n)?n:''; };
+const stars = v => v ? '★'.repeat(+v)+'☆'.repeat(5-v) : '―';
+const f1 = v => v==null ? '―' : v.toFixed(1);
+function avg(a){ a=a.filter(v=>v!==''&&v!=null&&isFinite(+v)).map(Number); return a.length? a.reduce((s,v)=>s+v,0)/a.length : null; }
+function fmtDate(d){ const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(d||''); if(!m) return d||''; const w='日月火水木金土'[new Date(+m[1],+m[2]-1,+m[3]).getDay()]; return `${+m[1]}年${+m[2]}月${+m[3]}日（${w}）`; }
+function itemNet(it){ const k=MKINDS[it.kind]||MKINDS.otherOut; const a=num(it.amount)-(it.kind==='fee'?num(it.tax):0); return k.dir==='in'?a:-a; }
+function itemYear(it,t){ return num(String(it.date||t.date||'').slice(0,4)); }
+function talkNet(t){ return (t.items||[]).reduce((s,it)=>s+itemNet(it),0); }
+function talkYear(t){ return num(String(t.date||'').slice(0,4)) || Y; }
+function talkMonth(t){ return num(String(t.date||'').slice(5,7)) || ''; }
+function talkLabel(t){ return t.title || t.event || '（無題の講演）'; }
+const talksSorted = () => G().talks.slice().sort((a,b)=>String(a.date||'9999').localeCompare(String(b.date||'9999')));
+const doneTalks = () => talksSorted().filter(t=>t.status==='done');
+function talkVirtualEvents(){
+  if(!S || !S.growth || !G().showOnTimeline) return [];
+  return G().talks.filter(t=>t.status!=='cancel' && t.date).map(t=>({id:'talk:'+t.id, who:'me', year:talkYear(t), month:talkMonth(t), title:'講演：'+talkLabel(t), cat:'work', dir:'', amt:'', memo:'', talk:true}));
+}
+const allEvents = () => S.events.concat(talkVirtualEvents()).sort(evSort);
+function talkYenByYear(yr){
+  return G().talks.filter(t=>t.status!=='cancel').reduce((s,t)=>s+(t.items||[]).filter(it=>itemYear(it,t)===yr).reduce((a,it)=>a+itemNet(it),0),0);
+}
+const talkMoneyByYear = yr => G().toMoney ? talkYenByYear(yr)/10000 : 0;   // 万円
+
+function goGrowth(sub){ tab='growth'; growthSub=sub; talkView=null; render(); window.scrollTo(0,0); }
+function openTalk(id){ tab='growth'; growthSub='talks'; talkView=id; render(); window.scrollTo(0,0); }
+function vGrowth(){
+  if(growthSub==='talks' && talkView){ const t=G().talks.find(x=>x.id===talkView); if(t) return vTalkDetail(t); talkView=null; }
+  const out=`<h1>成長</h1>
+  <div class="seg" role="group" aria-label="表示の切り替え">
+    <button aria-pressed="${growthSub==='talks'}" onclick="goGrowth('talks')">外部講演</button>
+    <button aria-pressed="${growthSub==='goals'}" onclick="goGrowth('goals')">目標</button>
+    <button aria-pressed="${growthSub==='skills'}" onclick="goGrowth('skills')">スキル</button>
+  </div>`;
+  if(growthSub==='goals') return out + vGoals();
+  if(growthSub==='skills') return out + `<div class="empty-note" style="margin-top:12px">スキルアップの計画と実績は、次の段階で追加します。<br>資格・研修・読書などを、講演と同じく「計画 → 実績 → 振り返り」で記録できるようにする予定です。</div>`;
+  return out + vTalks();
+}
+function vTalks(){
+  const g=G(), all=talksSorted(), done=all.filter(t=>t.status==='done'), today=todayStr();
+  const plans=all.filter(t=>t.status==='plan');
+  const pending=plans.filter(t=>t.date && t.date<today);
+  const cancels=all.filter(t=>t.status==='cancel');
+  const thisYear=done.filter(t=>talkYear(t)===Y);
+  const aud=done.reduce((s,t)=>s+num(t.audience),0);
+  const yearNet=talkYenByYear(Y);
+  const target=num(g.yearTarget);
+  const k=Math.min(3, Math.floor(done.length/2)), early=done.slice(0,k), recent=done.slice(-k);
+  let out=`<div class="bar" style="margin-top:6px"><p class="lead" style="margin:0">講演の計画と実績を記録し、回を重ねるごとの変化を見ます。</p><button class="btn small" onclick="editTalkPlan()">＋ 講演</button></div>
+  <div class="stats">
+    <div><small>今年の実施</small><b>${thisYear.length}回${target?`<span class="muted" style="font-weight:400"> / 目標${target}回</span>`:''}</b>${target?`<div class="progress"><div style="width:${Math.min(100,thisYear.length/target*100)}%"></div></div>`:''}</div>
+    <div><small>累計の実施</small><b>${done.length}回</b><small>延べ聴講者 約${aud.toLocaleString('ja-JP')}人</small></div>
+    <div><small>自己評価の平均</small><b>${f1(avg(done.map(t=>t.selfScore)))}</b>${k?`<small>最初${k}回 ${f1(avg(early.map(t=>t.selfScore)))} → 直近${k}回 ${f1(avg(recent.map(t=>t.selfScore)))}</small>`:''}</div>
+    <div><small>今年の講演収支</small><b class="${yearNet<0?'warn':''}">${yen(yearNet)}</b><small>謝礼 − 交通費など</small></div>
+  </div>`;
+  if(pending.length) out+=`<div class="notice">実績がまだの講演が${pending.length}件あります。${pending.map(t=>`<br><button class="link" onclick="editTalkResult('${t.id}')">${h(fmtDate(t.date))}　${h(talkLabel(t))}</button>`).join('')}</div>`;
+  out+=`<h2>成長の推移</h2>${growthChart(done)}${aspectCompare(done)}${improveRate(done)}`;
+  out+=`<h2>これからの講演</h2>`;
+  out+= plans.length ? `<div class="tlist">${plans.map(talkCard).join('')}</div>` : `<div class="empty-note">予定している講演はありません。<br><button class="btn" onclick="editTalkPlan()">講演の計画を登録</button></div>`;
+  if(done.length) out+=`<h2>実施した講演</h2><div class="tlist">${done.slice().reverse().map(talkCard).join('')}</div>`;
+  if(cancels.length) out+=`<details style="margin-top:14px"><summary>中止になった講演（${cancels.length}件）</summary><div class="tlist">${cancels.map(talkCard).join('')}</div></details>`;
+  return out;
+}
+function talkCard(t){
+  const past = t.status==='plan' && t.date && t.date<todayStr();
+  const badge = t.status==='done' ? '<span class="badge done">実施済み</span>' : t.status==='cancel' ? '<span class="badge">中止</span>' : past ? '<span class="badge warn">実績未入力</span>' : '<span class="badge plan">計画中</span>';
+  const meta=[t.title&&t.event?h(t.event):'', t.place?h(t.place):'', t.venueType&&t.venueType!=='venue'?VENUE_TYPES[t.venueType]:'', t.audience?`約${num(t.audience)}人`:''].filter(Boolean).join('　');
+  return `<button class="tcard" onclick="openTalk('${t.id}')">
+    <span class="tdate">${t.date?h(fmtDate(t.date)):'日付未定'}${badge}</span>
+    <b>${h(talkLabel(t))}</b>
+    ${meta?`<span class="tmeta">${meta}</span>`:''}
+    ${t.status==='done'?`<span class="tscore"><span class="star">${stars(t.selfScore)}</span>　反応 ${t.reaction||'―'}　緊張 ${t.tension||'―'}${(t.items||[]).length?`　収支 ${yen(talkNet(t))}`:''}</span>`:''}
+  </button>`;
+}
+function growthChart(done){
+  const pts=done.filter(t=>t.selfScore||t.reaction||t.tension);
+  if(pts.length<2) return `<div class="panel"><p class="muted">実施済みの講演が2件以上たまると、自己評価・反応・緊張度の推移をグラフで表示します。</p></div>`;
+  const W=700,H=270,pl=44,pr=20,pt=16,pb=40,n=pts.length;
+  const X=i=>pl+(W-pl-pr)*i/(n-1), Yv=v=>pt+(H-pt-pb)*(5-v)/4;
+  const series=[['selfScore','自己評価','var(--accent)'],['reaction','聴講者の反応','var(--green)'],['tension','緊張度','#E07B2E']];
+  let g='';
+  for(let v=1;v<=5;v++) g+=`<line x1="${pl}" x2="${W-pr}" y1="${Yv(v)}" y2="${Yv(v)}" class="gl"/><text x="${pl-12}" y="${Yv(v)+6}" class="yl">${v}</text>`;
+  const step=Math.ceil(n/7);
+  pts.forEach((t,i)=>{ if(i%step===0||i===n-1){ const m=/^(\d{4})-(\d{2})/.exec(t.date||''); g+=`<text x="${X(i)}" y="${H-12}" class="xl">${m?m[1].slice(2)+'/'+(+m[2]):i+1}</text>`; }});
+  const ma=pts.map((t,i)=>avg(pts.slice(Math.max(0,i-2),i+1).map(x=>x.selfScore)));
+  const mp=ma.map((v,i)=>v==null?null:`${X(i).toFixed(1)},${Yv(v).toFixed(1)}`).filter(Boolean);
+  if(mp.length>1) g+=`<path d="M${mp.join('L')}" class="ma"/>`;
+  series.forEach(([k,l,c])=>{
+    const ps=pts.map((t,i)=>t[k]?[X(i),Yv(+t[k])]:null);
+    let d='', pen=false; ps.forEach(p=>{ if(!p){pen=false;return;} d+=(pen?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1); pen=true; });
+    if(d) g+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="3" stroke-linejoin="round"/>`;
+    ps.forEach((p,i)=>{ if(p) g+=`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="5.5" fill="${c}" stroke="var(--card)" stroke-width="2"><title>${h(fmtDate(pts[i].date)+'　'+l+' '+pts[i][k])}</title></circle>`; });
+  });
+  return `<div class="panel"><div class="legend" style="margin-bottom:6px">${series.map(([k,l,c])=>`<span><i style="background:${c}"></i>${l}</span>`).join('')}<span><i style="background:var(--accent);opacity:.25"></i>自己評価（直近3回の平均）</span></div>
+  <div class="chart-box"><svg viewBox="0 0 ${W} ${H}" class="chart" role="img" aria-label="講演ごとの自己評価・反応・緊張度の推移">${g}</svg></div>
+  <p class="muted" style="font-size:.8rem;margin-top:4px">緊張度は低いほど落ち着いて話せたことを表します。</p></div>`;
+}
+function aspectCompare(done){
+  const ws=done.filter(t=>t.sc && ASPECTS.some(([k])=>t.sc[k]));
+  const k=Math.min(3,Math.floor(ws.length/2));
+  if(!k) return '';
+  const e=ws.slice(0,k), r=ws.slice(-k);
+  return `<h2>観点別の変化</h2><div class="panel"><p class="muted" style="margin-bottom:8px">最初の${k}回と直近の${k}回の平均です。</p>
+  ${ASPECTS.map(([key,l])=>{ const a=avg(e.map(t=>t.sc[key])), b=avg(r.map(t=>t.sc[key])); const d=(a!=null&&b!=null)?b-a:null;
+    return `<div class="asp"><span class="al">${l}</span><div class="bars"><div class="b0" style="width:${(a||0)/5*100}%"></div><div class="b1" style="width:${(b||0)/5*100}%"></div></div><span class="av">${f1(a)} → <b>${f1(b)}</b>${d!=null&&Math.abs(d)>=0.05?`<em class="${d>0?'up':'down'}">${d>0?'+':'−'}${Math.abs(d).toFixed(1)}</em>`:''}</span></div>`; }).join('')}
+  <div class="legend" style="margin-top:8px"><span><i style="background:var(--line)"></i>最初</span><span><i style="background:var(--accent)"></i>直近</span></div></div>`;
+}
+function improveRate(done){
+  const r=done.filter(t=>t.prevDone); if(!r.length) return '';
+  const c={yes:0,part:0,no:0}; r.forEach(t=>{ c[t.prevDone]=(c[t.prevDone]||0)+1; });
+  return `<div class="panel" style="margin-top:12px"><p><b>前回の改善点の実行</b></p><p class="muted">できた ${c.yes}回　一部 ${c.part}回　できなかった ${c.no}回（${r.length}回中）</p><div class="progress"><div style="width:${(c.yes+c.part*0.5)/r.length*100}%;background:var(--green)"></div></div></div>`;
+}
+function prevTalkOf(t){ const d=doneTalks().filter(x=>x.id!==t.id && (!t.date || String(x.date)<String(t.date))); return d[d.length-1]||null; }
+function prevNext(){ const d=doneTalks(); const p=d[d.length-1]; return p&&p.next||''; }
+function vTalkDetail(t){
+  const prev=prevTalkOf(t), items=t.items||[], net=talkNet(t);
+  const row=(k,v)=> (v===''||v==null) ? '' : `<div class="fact"><span class="k">${k}</span><span class="v">${v}</span></div>`;
+  const para=(k,v)=> v ? `<div class="para"><p class="k">${k}</p><p class="pre">${h(v)}</p></div>` : '';
+  const diff = t.minutes&&t.actualMinutes ? num(t.actualMinutes)-num(t.minutes) : null;
+  let out=`<button class="link" onclick="goGrowth('talks')">← 講演の一覧</button>
+  <p class="muted">${t.date?h(fmtDate(t.date)):'日付未定'}${t.time?'　'+h(t.time)+'〜':''}　${TALK_STATUS[t.status]||''}</p>
+  <h1 style="font-size:1.4rem">${h(talkLabel(t))}</h1>
+  ${t.title&&t.event?`<p class="lead">${h(t.event)}</p>`:''}
+  <div class="row" style="margin-top:12px">
+    <button class="btn small ghost" onclick="editTalkPlan('${t.id}')">計画を編集</button>
+    ${t.status==='cancel'?'':`<button class="btn small" onclick="editTalkResult('${t.id}')">${t.status==='done'?'実績を編集':'実績を記録'}</button>`}
+  </div>
+  <h2>概要</h2><div class="panel facts">
+    ${row('場所', [t.place?h(t.place):'', VENUE_TYPES[t.venueType]||''].filter(Boolean).join('　'))}
+    ${row('主催', t.organizer?h(t.organizer):'')}
+    ${row('形式', t.format?h(t.format):'')}
+    ${row('持ち時間', t.minutes?`${num(t.minutes)}分${diff!=null?`<small>実際 ${num(t.actualMinutes)}分（${diff>0?'+':diff<0?'−':'±'}${Math.abs(diff)}分）</small>`:''}`:'')}
+    ${row('聴講者', t.audience?`約${num(t.audience)}人${t.audienceType?`<small>${h(t.audienceType)}</small>`:''}`:(t.audienceType?h(t.audienceType):''))}
+    ${row('準備時間', (t.prepPlanH!==''&&t.prepPlanH!=null)||(t.prepActualH!==''&&t.prepActualH!=null)?`予定 ${t.prepPlanH||'―'}時間<small>実績 ${t.prepActualH||'―'}時間</small>`:'')}
+    ${row('テーマ', (t.tags||[]).map(x=>`<span class="tag">${h(x)}</span>`).join(' '))}
+  </div>
+  ${t.aim?`<h2>狙い</h2><div class="panel"><p class="pre">${h(t.aim)}</p></div>`:''}
+  ${prev&&prev.next?`<h2>前回の改善点</h2><div class="panel"><p class="muted" style="font-size:.8rem">${h(fmtDate(prev.date))}　${h(talkLabel(prev))}</p><p class="pre">${h(prev.next)}</p>${t.prevDone?`<p style="margin-top:8px"><span class="badge ${t.prevDone==='yes'?'done':t.prevDone==='part'?'plan':'warn'}">${{yes:'実行できた',part:'一部できた',no:'できなかった'}[t.prevDone]}</span></p>`:''}</div>`:''}`;
+  if(t.status==='done'){
+    out+=`<h2>実績</h2><div class="panel facts">
+      ${row('自己評価', `<span class="star">${stars(t.selfScore)}</span>`)}
+      ${row('聴講者の反応', t.reaction?`${t.reaction} / 5`:'')}
+      ${row('緊張度', t.tension?`${t.tension} / 5`:'')}
+      ${ASPECTS.map(([k,l])=>t.sc&&t.sc[k]?row(l,`${t.sc[k]} / 5`):'').join('')}
+      ${row('質疑の数', t.qaCount!==''&&t.qaCount!=null?`${num(t.qaCount)}件`:'')}
+      ${row('名刺交換', t.cards!==''&&t.cards!=null?`${num(t.cards)}枚`:'')}
+    </div>
+    ${para('反応のメモ',t.reactionMemo)}${para('良かった点',t.good)}${para('反省',t.reflect)}${para('次回への改善点',t.next)}${para('反響（問い合わせ・案件化など）',t.leads)}`;
+  }
+  if(t.slidesUrl||t.videoUrl) out+=`<p style="margin-top:14px">${t.slidesUrl?`<a href="${h(t.slidesUrl)}" target="_blank" rel="noopener">資料を開く</a>　`:''}${t.videoUrl?`<a href="${h(t.videoUrl)}" target="_blank" rel="noopener">録画を開く</a>`:''}</p>`;
+  out+=`<h2>謝礼・交通費</h2><div class="panel">
+    ${items.length?`<ul class="flows">${items.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))).map(it=>{ const k=MKINDS[it.kind]||MKINDS.otherOut, v=itemNet(it); return `<li><button onclick="editTalkMoney('${t.id}','${it.id}')"><span class="nm">${k.l}${it.receiptId?' <span class="tag">領収証</span>':''}<small>${[it.date?h(fmtDate(it.date)):'', it.payee?h(it.payee):'', it.memo?h(it.memo):''].filter(Boolean).join('　')}${it.kind==='fee'&&num(it.tax)?`　源泉 ${yen(num(it.tax))}`:''}</small></span><span class="val amt ${v<0?'out':'in'}">${v<0?'−':'+'}${yen(Math.abs(v))}</span></button></li>`; }).join('')}</ul>
+      <div class="fact" style="padding:12px 2px 0;border-top:1.5px solid var(--line)"><span class="k">差し引き</span><span class="v ${net<0?'warn':''}">${yen(net)}</span></div>`:'<p class="muted">謝礼や交通費を記録できます。領収証を撮影すると、AIで日付や金額を読み取ります。</p>'}
+    <button class="btn ghost small" style="margin-top:10px" onclick="editTalkMoney('${t.id}')">＋ 謝礼・交通費を追加</button>
+  </div>`;
+  return out;
+}
+const splitTags = s => [...new Set(String(s||'').split(/[、,，\s]+/).map(x=>x.trim()).filter(Boolean))];
+function tagButtons(){ const all=[...new Set(G().talks.flatMap(t=>t.tags||[]))]; return all.length?`<div class="tagpick">${all.map(x=>`<button type="button" class="tag" onclick="addTag(this.textContent)">${h(x)}</button>`).join('')}</div>`:''; }
+function addTag(x){ const el=$('#t_tags'); const cur=splitTags(el.value); if(!cur.includes(x)) cur.push(x); el.value=cur.join('、'); }
+function editTalkPlan(id){
+  const isNew=!id, t= id ? G().talks.find(x=>x.id===id) : {id:uid(), status:'plan', date:'', time:'', venueType:'venue', place:'', event:'', organizer:'', title:'', format:'講演', minutes:'', audience:'', audienceType:'', tags:[], aim:'', prepPlanH:'', items:[], sc:{}};
+  if(!t) return;
+  const pn = isNew ? prevNext() : '';
+  openSheet(isNew?'講演の計画を登録':'講演の計画を編集', `
+    ${pn?`<div class="notice"><b>前回の改善点</b><br><span class="pre">${h(pn)}</span></div>`:''}
+    <label class="f" for="t_event">イベント名</label><input type="text" id="t_event" value="${h(t.event)}" placeholder="例：自治体DXフォーラム">
+    <label class="f" for="t_title">講演タイトル</label><input type="text" id="t_title" value="${h(t.title)}">
+    <div class="two"><div><label class="f" for="t_date">日付</label><input type="date" id="t_date" value="${h(t.date)}"></div><div><label class="f" for="t_time">開始時刻</label><input type="time" id="t_time" value="${h(t.time)}"></div></div>
+    <div class="two"><div><label class="f" for="t_vt">開催形態</label><select id="t_vt">${Object.entries(VENUE_TYPES).map(([k,v])=>`<option value="${k}" ${t.venueType===k?'selected':''}>${v}</option>`).join('')}</select></div><div><label class="f" for="t_fmt">形式</label><select id="t_fmt">${TALK_FORMATS.map(x=>`<option ${t.format===x?'selected':''}>${x}</option>`).join('')}</select></div></div>
+    <label class="f" for="t_place">場所（会場名・市町村）</label><input type="text" id="t_place" value="${h(t.place)}">
+    <label class="f" for="t_org">主催者</label><input type="text" id="t_org" value="${h(t.organizer)}">
+    <div class="two"><div><label class="f" for="t_min">持ち時間（分）</label><input type="number" inputmode="numeric" id="t_min" value="${h(t.minutes)}"></div><div><label class="f" for="t_aud">聴講者数（おおよそ）</label><input type="number" inputmode="numeric" id="t_aud" value="${h(t.audience)}"></div></div>
+    <label class="f" for="t_audt">聴講者層</label><input type="text" id="t_audt" value="${h(t.audienceType)}" placeholder="例：自治体職員、建設コンサルタント">
+    <label class="f" for="t_tags">テーマタグ（「、」区切り）</label><input type="text" id="t_tags" value="${h((t.tags||[]).join('、'))}" placeholder="例：インフラOS、地域DX">${tagButtons()}
+    <label class="f" for="t_aim">狙い（伝えたいこと・達成したいこと）</label><textarea id="t_aim">${h(t.aim)}</textarea>
+    <label class="f" for="t_prep">準備時間の予定（時間）</label><input type="number" inputmode="decimal" id="t_prep" value="${h(t.prepPlanH)}">
+    ${isNew?'':`<label class="f" for="t_st">状態</label><select id="t_st">${Object.entries(TALK_STATUS).map(([k,v])=>`<option value="${k}" ${t.status===k?'selected':''}>${v}</option>`).join('')}</select>`}`,
+  () => {
+    const ev=$('#t_event').value.trim(), ti=$('#t_title').value.trim();
+    if(!ev && !ti) return 'イベント名か講演タイトルを入力してください';
+    Object.assign(t,{event:ev, title:ti, date:$('#t_date').value, time:$('#t_time').value, venueType:$('#t_vt').value, format:$('#t_fmt').value, place:$('#t_place').value.trim(), organizer:$('#t_org').value.trim(), minutes:numOr($('#t_min').value), audience:numOr($('#t_aud').value), audienceType:$('#t_audt').value.trim(), tags:splitTags($('#t_tags').value), aim:$('#t_aim').value, prepPlanH:numOr($('#t_prep').value)});
+    if(!isNew) t.status=$('#t_st').value;
+    if(isNew) G().talks.push(t);
+    tab='growth'; growthSub='talks'; talkView=t.id;
+    toast(isNew?'講演を登録しました':'保存しました');
+  }, isNew ? null : () => { (t.items||[]).forEach(it=>removeReceipt(it.receiptId)); G().talks=G().talks.filter(x=>x.id!==id); talkView=null; toast('講演を削除しました'); },
+  (t.items||[]).length ? `この講演と、謝礼・交通費${t.items.length}件（領収証の写真を含む）を削除します。よろしいですか？` : null);
+}
+function scaleField(name,label,val,lo,hi){ return `<fieldset class="scale"><legend>${label}</legend><div class="opts">${[1,2,3,4,5].map(i=>`<label><input type="radio" name="${name}" value="${i}" ${num(val)===i?'checked':''}><span>${i}</span></label>`).join('')}</div><p class="ends"><span>1：${lo}</span><span>5：${hi}</span></p></fieldset>`; }
+const readScale = n => { const el=document.querySelector(`input[name="${n}"]:checked`); return el?+el.value:''; };
+function editTalkResult(id){
+  const t=G().talks.find(x=>x.id===id); if(!t) return;
+  const prev=prevTalkOf(t), sc=t.sc||{};
+  openSheet('講演の実績を記録', `
+    <p class="muted">${h(talkLabel(t))}</p>
+    ${prev&&prev.next?`<div class="notice" style="margin-top:10px"><b>前回の改善点</b><br><span class="pre">${h(prev.next)}</span></div>
+    <label class="f" for="r_prev">前回の改善点は実行できましたか</label><select id="r_prev"><option value="">―</option>${[['yes','できた'],['part','一部できた'],['no','できなかった']].map(([k,v])=>`<option value="${k}" ${t.prevDone===k?'selected':''}>${v}</option>`).join('')}</select>`:''}
+    ${scaleField('r_self','自己評価（総合）',t.selfScore,'不満','大満足')}
+    ${scaleField('r_react','聴講者の反応',t.reaction,'反応が薄い','大いに盛り上がった')}
+    <label class="f" for="r_rmemo">反応のメモ</label><textarea id="r_rmemo" placeholder="うなずき、笑い、質問の内容など">${h(t.reactionMemo)}</textarea>
+    ${scaleField('r_ten','緊張度',t.tension,'落ち着いていた','とても緊張した')}
+    <p style="margin-top:18px;font-weight:700">観点別の自己評価</p>
+    ${ASPECTS.map(([k,l])=>scaleField('r_'+k,l,sc[k],'課題が多い','よくできた')).join('')}
+    <div class="two"><div><label class="f" for="r_act">実際の所要時間（分）</label><input type="number" inputmode="numeric" id="r_act" value="${h(t.actualMinutes)}" placeholder="${t.minutes?'持ち時間 '+num(t.minutes)+'分':''}"></div><div><label class="f" for="r_aud">聴講者数（実際）</label><input type="number" inputmode="numeric" id="r_aud" value="${h(t.audience)}"></div></div>
+    <div class="two"><div><label class="f" for="r_qa">質疑の数</label><input type="number" inputmode="numeric" id="r_qa" value="${h(t.qaCount)}"></div><div><label class="f" for="r_cards">名刺交換（枚）</label><input type="number" inputmode="numeric" id="r_cards" value="${h(t.cards)}"></div></div>
+    <label class="f" for="r_prep">準備にかけた時間（時間）</label><input type="number" inputmode="decimal" id="r_prep" value="${h(t.prepActualH)}" placeholder="${t.prepPlanH?'予定 '+t.prepPlanH+'時間':''}">
+    <label class="f" for="r_good">良かった点</label><textarea id="r_good">${h(t.good)}</textarea>
+    <label class="f" for="r_ref">反省</label><textarea id="r_ref">${h(t.reflect)}</textarea>
+    <label class="f" for="r_next">次回への改善点</label><textarea id="r_next" placeholder="次の講演を計画するときに表示されます">${h(t.next)}</textarea>
+    <label class="f" for="r_leads">反響（問い合わせ・案件化など）</label><textarea id="r_leads">${h(t.leads)}</textarea>
+    <label class="f" for="r_sl">資料のリンク</label><input type="text" inputmode="url" id="r_sl" value="${h(t.slidesUrl)}" placeholder="https://">
+    <label class="f" for="r_vd">録画のリンク</label><input type="text" inputmode="url" id="r_vd" value="${h(t.videoUrl)}" placeholder="https://">`,
+  () => {
+    const urlOk=v=>!v||/^https?:\/\//i.test(v), sl=$('#r_sl').value.trim(), vd=$('#r_vd').value.trim();
+    if(!urlOk(sl)||!urlOk(vd)) return 'リンクは https:// から入力してください';
+    const sc2={}; ASPECTS.forEach(([k])=>{ const v=readScale('r_'+k); if(v) sc2[k]=v; });
+    Object.assign(t,{status:'done', selfScore:readScale('r_self'), reaction:readScale('r_react'), reactionMemo:$('#r_rmemo').value, tension:readScale('r_ten'), sc:sc2, actualMinutes:numOr($('#r_act').value), audience:numOr($('#r_aud').value), qaCount:numOr($('#r_qa').value), cards:numOr($('#r_cards').value), prepActualH:numOr($('#r_prep').value), good:$('#r_good').value, reflect:$('#r_ref').value, next:$('#r_next').value, leads:$('#r_leads').value, slidesUrl:sl, videoUrl:vd});
+    const pv=$('#r_prev'); if(pv) t.prevDone=pv.value;
+    tab='growth'; growthSub='talks'; talkView=t.id;
+    toast('実績を記録しました');
+  }, null);
+}
+
+/* ---------- 謝礼・交通費と領収証 ---------- */
+let rcPending=null, rcCurrent=null;
+function editTalkMoney(tid, iid){
+  const t=G().talks.find(x=>x.id===tid); if(!t) return;
+  if(!Array.isArray(t.items)) t.items=[];
+  const isNew=!iid, it= iid ? t.items.find(x=>x.id===iid) : {id:uid(), kind:'travel', amount:'', tax:'', date:t.date||todayStr(), payee:'', memo:'', receiptId:''};
+  if(!it) return;
+  rcPending=null; rcCurrent=null;
+  openSheet(isNew?'謝礼・交通費を追加':'謝礼・交通費を編集', `
+    <div class="rc">
+      <div id="rc_prev" class="rc-prev">${it.receiptId?'<p class="muted">領収証を読み込み中…</p>':'<p class="muted">領収証の写真はまだありません</p>'}</div>
+      <div class="row">
+        <label class="btn ghost small" style="display:inline-flex;align-items:center">撮影する<input type="file" accept="image/*" capture="environment" hidden onchange="rcPick(this)"></label>
+        <label class="btn ghost small" style="display:inline-flex;align-items:center">写真を選ぶ<input type="file" accept="image/*" hidden onchange="rcPick(this)"></label>
+        <button type="button" class="btn small" id="rc_ai" onclick="rcRead()" hidden>AIで読み取る</button>
+      </div>
+      <p class="hint" id="rc_msg"></p>
+    </div>
+    <label class="f" for="m_kind">種類</label><select id="m_kind" onchange="$('#m_taxw').hidden=this.value!=='fee'">${Object.entries(MKINDS).map(([k,v])=>`<option value="${k}" ${it.kind===k?'selected':''}>${v.l}</option>`).join('')}</select>
+    <div class="two"><div><label class="f" for="m_amt">金額（円）</label><input type="number" inputmode="numeric" id="m_amt" value="${h(it.amount)}"></div><div><label class="f" for="m_date">日付</label><input type="date" id="m_date" value="${h(it.date)}"></div></div>
+    <div id="m_taxw" ${it.kind==='fee'?'':'hidden'}><label class="f" for="m_tax">うち源泉徴収税額（円・任意）</label><input type="number" inputmode="numeric" id="m_tax" value="${h(it.tax)}"><p class="hint">差し引いた手取り額を収入として計算します。</p></div>
+    <label class="f" for="m_payee">支払先・支払元</label><input type="text" id="m_payee" value="${h(it.payee)}" placeholder="例：JR東日本、主催団体名">
+    <label class="f" for="m_memo">内容</label><input type="text" id="m_memo" value="${h(it.memo)}" placeholder="例：新幹線 東京→仙台 往復">`,
+  () => {
+    const amt=num($('#m_amt').value,NaN);
+    if(!(amt>0)) return '金額を入力してください';
+    const kind=$('#m_kind').value;
+    if(kind==='fee' && num($('#m_tax').value)>=amt) return '源泉徴収税額は金額より小さくしてください';
+    Object.assign(it,{kind, amount:Math.round(amt), tax: kind==='fee' ? (numOr($('#m_tax').value)||'') : '', date:$('#m_date').value, payee:$('#m_payee').value.trim(), memo:$('#m_memo').value.trim()});
+    if(rcPending){ const old=it.receiptId, rid=uid()+uid(); it.receiptId=rid; saveReceipt(rid, rcPending); if(old) removeReceipt(old); }
+    if(isNew) t.items.push(it);
+    rcPending=null; rcCurrent=null;
+    tab='growth'; growthSub='talks'; talkView=t.id;
+    toast('保存しました');
+  }, isNew ? null : () => { removeReceipt(it.receiptId); t.items=t.items.filter(x=>x.id!==iid); toast('削除しました'); },
+  it.receiptId ? 'この記録と領収証の写真を削除します。よろしいですか？' : null);
+  if(it.receiptId) loadReceipt(it.receiptId).then(d=>{ if(rcPending) return; rcCurrent=d; showRc(d); }).catch(()=>{ const p=$('#rc_prev'); if(p) p.innerHTML='<p class="muted">領収証を読み込めませんでした</p>'; });
+}
+function showRc(d){
+  const p=$('#rc_prev'); if(!p) return;
+  p.innerHTML = d ? `<img src="${d}" alt="領収証の写真（タップで拡大）" onclick="this.classList.toggle('big')">` : '<p class="muted">領収証の写真が見つかりません</p>';
+  const b=$('#rc_ai'); if(b) b.hidden=!d;
+}
+function saveReceipt(rid, dataUrl){
+  if(!fbDb) return;
+  fbDb.ref(DB_ROOT+'/receipts/'+rid).set({img:dataUrl, createdAt:firebase.database.ServerValue.TIMESTAMP})
+    .catch(e=>{ console.error(e); toast('領収証の写真を保存できませんでした'); });
+}
+function removeReceipt(rid){ if(!rid||!fbDb) return; fbDb.ref(DB_ROOT+'/receipts/'+rid).remove().catch(()=>{}); }
+function loadReceipt(rid){ return fbDb.ref(DB_ROOT+'/receipts/'+rid+'/img').once('value').then(s=>s.val()); }
+function compressImage(file, max=1400, q=0.72){
+  return new Promise((res,rej)=>{
+    const url=URL.createObjectURL(file), img=new Image();
+    img.onload=()=>{
+      const s=Math.min(1, max/Math.max(img.naturalWidth,img.naturalHeight));
+      const c=document.createElement('canvas'); c.width=Math.round(img.naturalWidth*s); c.height=Math.round(img.naturalHeight*s);
+      const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url); res(c.toDataURL('image/jpeg',q));
+    };
+    img.onerror=()=>{ URL.revokeObjectURL(url); rej(new Error('写真を読み込めませんでした')); };
+    img.src=url;
+  });
+}
+async function rcPick(inp){
+  const f=inp.files[0]; inp.value=''; if(!f) return;
+  const msg=$('#rc_msg');
+  try{
+    msg.textContent='写真を準備しています…';
+    rcPending=await compressImage(f); showRc(rcPending); msg.textContent='';
+    if(aiKey()) rcRead(); else msg.textContent='設定でAIのAPIキーを登録すると、金額や日付を自動で読み取れます。';
+  }catch(e){ msg.textContent=e.message; }
+}
+const AI_KEY='jinsei-sekkeizu-ai-key', AI_MODEL='jinsei-sekkeizu-ai-model', AI_DEFAULT_MODEL='claude-haiku-5-5';
+const aiKey=()=>{ try{ return localStorage.getItem(AI_KEY)||''; }catch(e){ return ''; } };
+const aiModel=()=>{ try{ return localStorage.getItem(AI_MODEL)||AI_DEFAULT_MODEL; }catch(e){ return AI_DEFAULT_MODEL; } };
+async function rcRead(){
+  const d=rcPending||rcCurrent, msg=$('#rc_msg'), btn=$('#rc_ai');
+  if(!msg) return;
+  if(!d){ msg.textContent='先に領収証の写真を撮影してください'; return; }
+  if(!aiKey()){ msg.textContent='設定でAIのAPIキーを登録してください'; return; }
+  msg.textContent='AIで読み取っています…'; if(btn) btn.disabled=true;
+  try{
+    const r=await ocrReceipt(d);
+    if(!$('#m_amt')) return;
+    const filled=[];
+    if(r.kind && MKINDS[r.kind]){ $('#m_kind').value=r.kind; $('#m_taxw').hidden=r.kind!=='fee'; }
+    if(r.amount>0){ $('#m_amt').value=Math.round(r.amount); filled.push('金額'); }
+    if(/^\d{4}-\d{2}-\d{2}$/.test(r.date)){ $('#m_date').value=r.date; filled.push('日付'); }
+    if(r.payee){ $('#m_payee').value=r.payee; filled.push('支払先'); }
+    if(r.memo){ $('#m_memo').value=r.memo; filled.push('内容'); }
+    if(r.kind==='fee' && r.tax>0) $('#m_tax').value=Math.round(r.tax);
+    msg.textContent = filled.length ? `${filled.join('・')}を読み取りました。内容を確かめてから保存してください。` : '読み取れる項目がありませんでした。手で入力してください。';
+  }catch(e){ const m=$('#rc_msg'); if(m) m.textContent=e.message; }
+  finally{ if(btn) btn.disabled=false; }
+}
+async function ocrReceipt(dataUrl){
+  const b64=dataUrl.split(',')[1];
+  const prompt=`この画像は日本の領収証・レシート・交通機関の利用票・謝金の支払明細のいずれかです。読み取った内容を、次の形のJSONだけで返してください。説明文は不要です。
+{"date":"YYYY-MM-DD（読めなければnull）","amount":税込の合計金額（円・整数。読めなければnull）,"payee":"発行者や店名（読めなければnull）","kind":"travel・lodging・fee・otherOut のいずれか（交通機関はtravel、宿泊はlodging、謝金・謝礼の支払明細はfee、それ以外はotherOut）","tax":源泉徴収税額（謝礼の明細に記載があれば整数、なければnull）,"memo":"内容の短い要約（例：新幹線 東京→仙台）"}
+和暦は西暦に直してください。`;
+  let res;
+  try{
+    res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'content-type':'application/json','x-api-key':aiKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:aiModel(), max_tokens:600, messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:prompt}]}]})});
+  }catch(e){ throw new Error('AIに接続できませんでした。通信を確認してください。'); }
+  if(!res.ok){
+    let m=''; try{ m=(await res.json()).error.message; }catch(e){}
+    if(res.status===401) throw new Error('APIキーが正しくありません。設定を確認してください。');
+    if(res.status===404) throw new Error('AIのモデル名が見つかりません。設定のモデル名を確認してください。');
+    if(res.status===429||res.status===529) throw new Error('AIが混み合っています。少し待ってからもう一度お試しください。');
+    throw new Error('読み取りに失敗しました（'+res.status+(m?'：'+m:'')+'）');
+  }
+  const j=await res.json();
+  const text=(j.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('');
+  const mm=text.match(/\{[\s\S]*\}/); if(!mm) throw new Error('読み取り結果を解釈できませんでした');
+  let o; try{ o=JSON.parse(mm[0]); }catch(e){ throw new Error('読み取り結果を解釈できませんでした'); }
+  return {date:o.date||'', amount:num(o.amount), payee:o.payee||'', memo:o.memo||'', kind:o.kind||'', tax:num(o.tax)};
+}
+function setGrowth(k,v){
+  const g=G();
+  if(k==='yearTarget'){ const n=Math.round(num(v,NaN)); g.yearTarget = n>0 ? n : ''; }
+  else g[k]=!!v;
+  save(); render(); toast('保存しました');
+}
+function setAi(k,v){ try{ v=String(v).trim(); if(v) localStorage.setItem(k,v); else localStorage.removeItem(k); }catch(e){} render(); toast('この端末に保存しました'); }
+
+
 /* ---------- settings ---------- */
 function vSettings(){
   const p=P();
-  return `<h1>設定</h1>
+  return `<button class="link" onclick="go('home')">← 設計図に戻る</button><h1>設定</h1>
   <h2>わたしのこと</h2>
   <div class="panel">
     <label class="f" for="s_name">名前</label>
@@ -991,6 +1416,19 @@ function vSettings(){
     ${p.family.length?`<ul class="flows">${p.family.map(f=>`<li><button onclick="editFamily('${f.id}')"><span class="nm">${h(f.name)}<small>${fmtBirth(f)}　イベント${S.events.filter(e=>e.who===f.id).length}件</small></span><span class="val">いま${rowAge(f,Y)}歳</span></button></li>`).join('')}</ul>`:''}
     <button class="btn ghost small" style="margin-top:8px" onclick="editFamily()">＋ 家族を追加</button>
   </div>
+  <h2>成長（外部講演）</h2>
+  <div class="panel">
+    <label class="f" for="s_gt">年間の講演目標（回）</label><input type="number" inputmode="numeric" id="s_gt" value="${h(G().yearTarget)}" onchange="setGrowth('yearTarget',this.value)">
+    <label class="switch"><input type="checkbox" ${G().showOnTimeline?'checked':''} onchange="setGrowth('showOnTimeline',this.checked)">講演を年表と設計図に表示する</label><br>
+    <label class="switch"><input type="checkbox" ${G().toMoney?'checked':''} onchange="setGrowth('toMoney',this.checked)">謝礼・交通費をお金の計算に入れる</label>
+  </div>
+  <h2>領収証のAI読み取り</h2>
+  <div class="panel">
+    <p class="muted">Claude（Anthropic）のAPIで、領収証の日付・金額・支払先を読み取ります。APIキーはこの端末にだけ保存され、クラウドやGitHubには保存されません。使う端末ごとに登録してください。</p>
+    <label class="f" for="s_ak">APIキー</label><input type="password" id="s_ak" value="${h(aiKey())}" placeholder="sk-ant-…" autocomplete="off" onchange="setAi(AI_KEY,this.value)">
+    <p class="hint">${aiKey()?'この端末に登録済みです':'未登録です'}</p>
+    <label class="f" for="s_am">モデル</label><input type="text" id="s_am" value="${h(aiModel())}" onchange="setAi(AI_MODEL,this.value)">
+  </div>
   <h2>アカウント</h2>
   <div class="panel">
     <p>${h(user && user.email || '')}<span class="muted">　でログイン中</span></p>
@@ -999,7 +1437,7 @@ function vSettings(){
   </div>
   <h2>データ</h2>
   <div class="panel">
-    <p class="muted">念のためのバックアップとして、ファイルやテキストに書き出せます。</p>
+    <p class="muted">念のためのバックアップとして、ファイルやテキストに書き出せます。領収証の写真は書き出しに含まれません。</p>
     <div class="row" style="margin-top:12px">
       <button class="btn ghost small" onclick="exportJSON()">ファイルに書き出す</button>
       <button class="btn ghost small" onclick="copyJSON()">データをコピー</button>
@@ -1118,7 +1556,8 @@ function importPaste(){
 function clearAll(){
   if(!confirm('クラウド上のすべてのデータを消します。ほかの端末からも消え、元に戻せません。よろしいですか？')) return;
   try{ localStorage.removeItem(KEY); }catch(e){}
-  S=null; save(); tab='home'; render(); window.scrollTo(0,0);
+  S=null; save(); if(fbDb) fbDb.ref(DB_ROOT+'/receipts').remove().catch(()=>{});
+  tab='home'; render(); window.scrollTo(0,0);
 }
 
 /* ---------- sheet ---------- */
@@ -1127,7 +1566,7 @@ function openSheet(title, body, onSave, onDel, delMsg){
   sheetDelMsg=delMsg||null;
   lastFocus=document.activeElement;
   $('#sheetTitle').textContent=title; $('#sheetBody').innerHTML=body; $('#sheetErr').textContent='';
-  sheetSave=onSave; sheetDel=onDel; $('#sheetDel').hidden=!onDel; $('#sheet').hidden=false;
+  sheetSave=onSave; sheetDel=onDel; $('#sheetDel').hidden=!onDel; $('#sheetSave').hidden=!onSave; $('#sheet').hidden=false;
   document.body.style.overflow='hidden';
 }
 function closeSheet(){
