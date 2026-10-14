@@ -291,15 +291,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent);outline:none}
 .para{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}
 .para .k{font-size:.8rem;color:var(--sub);margin-bottom:2px}
 .pre{white-space:pre-wrap}
-fieldset.scale{border:0;padding:0;margin:14px 0 0}
-fieldset.scale legend{font-size:.85rem;color:var(--sub);padding:0;margin-bottom:6px}
-.scale .opts{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.scale label{position:relative}
-.scale input{position:absolute;opacity:0;width:1px;height:1px}
-.scale span{display:flex;align-items:center;justify-content:center;min-height:44px;border:1.5px solid var(--line);border-radius:10px;font-weight:700;background:var(--paper);cursor:pointer}
-.scale input:checked+span{background:var(--accent);border-color:var(--accent);color:var(--paper)}
-.scale input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
-.scale .ends{display:flex;justify-content:space-between;font-size:.72rem;color:var(--sub);margin-top:2px}
 .rc{background:var(--paper);border:1.5px dashed var(--line);border-radius:12px;padding:12px;margin-top:6px}
 .rc-prev{margin-bottom:10px;text-align:center}
 .rc-prev img{max-width:100%;max-height:220px;border-radius:8px;cursor:zoom-in;display:block;margin:0 auto}
@@ -1218,8 +1209,10 @@ function editTalkPlan(id){
   }, isNew ? null : () => { (t.items||[]).forEach(it=>removeReceipt(it.receiptId)); G().talks=G().talks.filter(x=>x.id!==id); talkView=null; toast('講演を削除しました'); },
   (t.items||[]).length ? `この講演と、謝礼・交通費${t.items.length}件（領収証の写真を含む）を削除します。よろしいですか？` : null);
 }
-function scaleField(name,label,val,lo,hi){ return `<fieldset class="scale"><legend>${label}</legend><div class="opts">${[1,2,3,4,5].map(i=>`<label><input type="radio" name="${name}" value="${i}" ${num(val)===i?'checked':''}><span>${i}</span></label>`).join('')}</div><p class="ends"><span>1：${lo}</span><span>5：${hi}</span></p></fieldset>`; }
-const readScale = n => { const el=document.querySelector(`input[name="${n}"]:checked`); return el?+el.value:''; };
+function scaleField(name,label,val,lo,hi){
+  return `<label class="f" for="${name}">${label}</label><select id="${name}"><option value="">―（未選択）</option>${[1,2,3,4,5].map(i=>`<option value="${i}" ${num(val)===i?'selected':''}>${i}${i===1?'：'+lo:i===5?'：'+hi:''}</option>`).join('')}</select>`;
+}
+const readScale = n => { const el=document.getElementById(n); return el&&el.value?+el.value:''; };
 function editTalkResult(id){
   const t=G().talks.find(x=>x.id===id); if(!t) return;
   const prev=prevTalkOf(t), sc=t.sc||{};
@@ -1231,7 +1224,7 @@ function editTalkResult(id){
     ${scaleField('r_react','聴講者の反応',t.reaction,'反応が薄い','大いに盛り上がった')}
     <label class="f" for="r_rmemo">反応のメモ</label><textarea id="r_rmemo" placeholder="うなずき、笑い、質問の内容など">${h(t.reactionMemo)}</textarea>
     ${scaleField('r_ten','緊張度',t.tension,'落ち着いていた','とても緊張した')}
-    <p style="margin-top:18px;font-weight:700">観点別の自己評価</p>
+    <p style="margin-top:20px;font-weight:700">観点別の自己評価</p>
     ${ASPECTS.map(([k,l])=>scaleField('r_'+k,l,sc[k],'課題が多い','よくできた')).join('')}
     <div class="two"><div><label class="f" for="r_act">実際の所要時間（分）</label><input type="number" inputmode="numeric" id="r_act" value="${h(t.actualMinutes)}" placeholder="${t.minutes?'持ち時間 '+num(t.minutes)+'分':''}"></div><div><label class="f" for="r_aud">聴講者数（実際）</label><input type="number" inputmode="numeric" id="r_aud" value="${h(t.audience)}"></div></div>
     <div class="two"><div><label class="f" for="r_qa">質疑の数</label><input type="number" inputmode="numeric" id="r_qa" value="${h(t.qaCount)}"></div><div><label class="f" for="r_cards">名刺交換（枚）</label><input type="number" inputmode="numeric" id="r_cards" value="${h(t.cards)}"></div></div>
