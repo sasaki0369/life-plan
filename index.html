@@ -355,7 +355,7 @@ function normalize(d){
   o.events.forEach(e => { if(!e.who) e.who = 'me'; });
   o.growth = Object.assign(defaults().growth, o.growth || {});
   ['talks','skills'].forEach(k => { if(!Array.isArray(o.growth[k])) o.growth[k] = []; });
-  o.growth.talks.forEach(t => { if(!Array.isArray(t.items)) t.items = []; if(!Array.isArray(t.tags)) t.tags = []; if(!t.sc || typeof t.sc!=='object') t.sc = {}; if(!t.status) t.status='plan'; });
+  o.growth.talks.forEach(t => { if(!Array.isArray(t.items)) t.items = []; if(!Array.isArray(t.tags)) t.tags = []; if(!t.sc || typeof t.sc!=='object') t.sc = {}; if(!t.status) t.status='plan'; if(t.format==='講義') t.format='授業'; });
   return o;
 }
 /* ---------- Firebase ---------- */
@@ -1015,7 +1015,7 @@ let growthSub='talks', talkView=null;
 const pad2 = n => String(n).padStart(2,'0');
 const todayStr = () => `${Y}-${pad2(M)}-${pad2(TD)}`;
 const G = () => S.growth;
-const TALK_FORMATS=['講演','基調講演','パネルディスカッション','ワークショップ','勉強会・LT','講義','その他'];
+const TALK_FORMATS=['講演','基調講演','プレゼン','挨拶','パネルディスカッション','ワークショップ','勉強会・LT','授業','その他'];
 const VENUE_TYPES={venue:'会場',online:'オンライン',hybrid:'ハイブリッド'};
 const TALK_STATUS={plan:'計画中',done:'実施済み',cancel:'中止'};
 const ASPECTS=[['structure','構成'],['speech','話し方'],['time','時間配分'],['qa','質疑対応']];
